@@ -11,3 +11,7 @@ def home(request):
 def dashboard(request):
     return HttpResponse("<h1>Área administrativa</h1>")
 
+@login_required
+def user_profile(request):
+    return HttpResponse("<h1>TELA DO USUARIO</h1>")
+

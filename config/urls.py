@@ -17,11 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.portal.views import home
-from apps.portal.views import dashboard
+from apps.portal.views import dashboard, user_profile
 
 urlpatterns = [
     path('', home),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('dashboard/', dashboard)
+    path('dashboard/', dashboard),
+    path('accounts/profile/', user_profile, name='profile'),
 ]
