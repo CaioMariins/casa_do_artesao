@@ -8,6 +8,14 @@ class ArtesaoQuerySet(models.QuerySet):
         return self.filter(ativo=True)
 
 
+class ArtesaoManager(models.Manager):
+    def get_queryset(self):
+        return ArtesaoQuerySet(self.model, using=self._db)
+
+    def ativos(self):
+        return self.get_queryset().ativos()
+
+
 class Artesao(models.Model):
     nome = models.CharField(max_length=255)
     telefone = models.CharField(max_length=50)
@@ -17,7 +25,7 @@ class Artesao(models.Model):
     ativo = models.BooleanField(default=True)
     data_criacao = models.DateTimeField(auto_now_add=True)
 
-    objects = ArtesaoQuerySet.as_manager()
+    objects = ArtesaoManager()
 
     def __str__(self):
         return self.nome
