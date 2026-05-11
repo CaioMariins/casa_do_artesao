@@ -5,7 +5,7 @@ import re
 class ArtesaoForm(forms.ModelForm):
     class Meta:
         model = Artesao
-        fields = ['nome', 'descricao', 'categoria', 'telefone', 'ativo']
+        fields = ['nome', 'descricao', 'categoria', 'email', 'telefone', 'ativo']
 
     def clean(self):
         cleaned_data = super().clean()

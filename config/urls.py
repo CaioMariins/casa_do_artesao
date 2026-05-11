@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from apps.artesaos.views import listar_artesaos
+from apps.artesaos.views import listar_artesaos, criar_artesao
 from apps.portal.views import dashboard, home, user_profile
 
 urlpatterns = [
@@ -27,5 +27,6 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("dashboard/", dashboard),
     path("accounts/profile/", user_profile, name="profile"),
-    path("artesaos/", listar_artesaos, name="listar_artesaos"),
+    path("artesaos/", listar_artesaos, name="lista_artesaos"),
+    path("artesaos/novo", criar_artesao, name="criar_artesao")
 ]
