@@ -6,12 +6,17 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Cadastrar Artesão</h1>
+    <h1>{% if form.instance.pk %}
+        Editar Artesão
+    {% else %}
+        Cadastrar Artesão
+    {% endif %}</h1>
 
     <form method="post">
     {% csrf_token %}
 
     {{ form.as_p }}
+
     
     {% if form.errors %}
         <div class="errors">
