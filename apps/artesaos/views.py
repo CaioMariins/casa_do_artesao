@@ -7,7 +7,12 @@ from .models import Artesao
 
 
 def listar_artesaos(request):
-    artesaos = Artesao.objects.ativos()
+    mostrar_inativos = request.GET.get("inativos")
+
+    if mostrar_inativos:
+        artesaos = Artesao.objects.all()
+    else:
+        artesaos = Artesao.objects.ativos()
 
     return render(request, "artesaos/lista_artesaos.html", {"artesaos": artesaos})
 
@@ -32,3 +37,12 @@ def editar_artesao(request, id):
         return redirect("lista_artesaos")
 
     return render(request, "artesaos/form.html", {"form": form})
+
+
+def toggle_ativo(request, id):
+    artesao = get_object_or_404(Artesao, id=id)
+
+    artesao.ativo = not artesao.ativo
+    artesao.save()
+
+    return redirect("lista_artesaos")
