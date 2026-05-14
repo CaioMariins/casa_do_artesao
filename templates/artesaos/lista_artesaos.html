@@ -7,18 +7,27 @@
 </head>
 <body>
     <h1>Lista de Artesãos</h1>
-
+    <a href="?inativos=1">Mostrar Todos</a>
+    <br>
+    <a href="/artesaos/">Mostrar apenas ativos</a>
     <ul>
     {% for artesao in artesaos %}
         <li>
-        {{ artesao.nome }} - 
-        {{ artesao.categoria }} - 
-        {{ artesao.descricao }} - 
-        {% if artesao.ativo %}
-            Ativo
-        {% else %}
-            Inativo
-        {% endif %}
+            {{ artesao.nome }} - 
+            {{ artesao.categoria }} - 
+            {{ artesao.descricao }} - 
+            {% if artesao.ativo %}
+                Ativo
+            {% else %}
+                Inativo
+            {% endif %}
+            <a href="{% url 'toggle_artesao' artesao.id %}">
+                {% if artesao.ativo %}
+                    Desativar
+                {% else %}
+                    Ativar
+                {% endif %}
+            </a>    
         </li>
     {% empty %}
         <p>Não há artesãos cadastrados</p>

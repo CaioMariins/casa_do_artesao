@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from apps.artesaos.views import criar_artesao, editar_artesao, listar_artesaos
+from apps.artesaos.views import criar_artesao, editar_artesao, listar_artesaos, toggle_ativo
 from apps.portal.views import dashboard, home, user_profile
 
 urlpatterns = [
@@ -30,4 +30,5 @@ urlpatterns = [
     path("artesaos/", listar_artesaos, name="lista_artesaos"),
     path("artesaos/novo/", criar_artesao, name="criar_artesao"),
     path("artesaos/<int:id>/editar/", editar_artesao, name="editar_artesao"),
+    path("artesaos/<int:id>/toggle/", toggle_ativo, name="toggle_artesao")
 ]
