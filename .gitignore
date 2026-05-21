@@ -8,3 +8,6 @@ secrets.py
 .streamlit/
 .DS_Store
 ~$*.xlsx
+*.xlsx
+*.csv
+*.odt
