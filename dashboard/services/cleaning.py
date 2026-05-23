@@ -1,5 +1,3 @@
-import pandas as pd
-
 def limpar_dados(df):
     """
     Realiza limpeza e padronização dos dados.
@@ -8,7 +6,6 @@ def limpar_dados(df):
     df = df.copy()
 
     # Remover linhas sem nome
-
     df = df.dropna(subset=["nome"])
 
     # Remove espaços extras
@@ -57,7 +54,6 @@ def limpar_dados(df):
     ]
 
     for coluna in colunas_booleanas:
-
         if coluna not in df.columns:
             continue
 
@@ -66,52 +62,30 @@ def limpar_dados(df):
             .astype(str)
             .str.strip()
             .str.lower()
-            .replace({
-                "true": "Sim",
-                "sim": "Sim",
-                "s": "Sim",
-                "1": "Sim",
-
-                "false": "Não",
-                "não": "Não",
-                "nao": "Não",
-                "n": "Não",
-                "0": "Não"
-            })
+            .replace(
+                {
+                    "true": "Sim",
+                    "sim": "Sim",
+                    "s": "Sim",
+                    "1": "Sim",
+                    "false": "Não",
+                    "não": "Não",
+                    "nao": "Não",
+                    "n": "Não",
+                    "0": "Não",
+                }
+            )
         )
 
     # Remover valores inválidos
 
     if "tipo_cadastro" in df.columns:
-
-        df = df[
-            df["tipo_cadastro"].isin([
-                "fixo",
-                "visitante"
-            ])
-        ]
+        df = df[df["tipo_cadastro"].isin(["fixo", "visitante"])]
 
     if "renda_artesanato" in df.columns:
-
-        df = df[
-            df["renda_artesanato"].isin([
-                "10%",
-                "30%",
-                "50%",
-                "70%",
-                "100%"
-            ])
-        ]
+        df = df[df["renda_artesanato"].isin(["10%", "30%", "50%", "70%", "100%"])]
 
     if "genero" in df.columns:
-
-        df = df[
-            df["genero"].isin([
-                "mulher",
-                "homem",
-                "pessoa trans",
-                "outros"
-            ])
-        ]
+        df = df[df["genero"].isin(["mulher", "homem", "pessoa trans", "outros"])]
 
     return df
