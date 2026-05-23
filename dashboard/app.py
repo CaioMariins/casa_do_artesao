@@ -1,6 +1,7 @@
 import streamlit as st
-from services.loader import carregar_dados
 from services.cleaning import limpar_dados
+from services.features import criar_colunas_derivadas
+from services.loader import carregar_dados
 from services.normalize import normalizar_dados
 
 st.set_page_config(page_title="Casa do Artesão", layout="wide")
@@ -10,6 +11,7 @@ st.title("Dashboard Casa do Artesão")
 df = carregar_dados()
 df = limpar_dados(df)
 df = normalizar_dados(df)
+df = criar_colunas_derivadas(df)
 
 if df.empty:
     st.error("Dataset vazio")
