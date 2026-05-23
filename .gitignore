@@ -5,9 +5,3 @@ venv/
 *.sqlite3
 __pycache__/
 secrets.py
-.streamlit/
-.DS_Store
-~$*.xlsx
-*.xlsx
-*.csv
-*.odt
