@@ -4,7 +4,7 @@ from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
-from services.metrics import calclular_metricas
+from services.metrics import calclular_metricas, calcular_metricas_demograficas
 
 st.set_page_config(page_title="Casa do Artesão", layout="wide")
 
@@ -50,3 +50,31 @@ with col3:
 
 with col4:
     st.metric("% MEI", f'{metricas["percentual_mei"]:.1f}%')
+
+metricas_demo = calcular_metricas_demograficas(df)
+
+st.subheader("Métricas Demográficas")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.write("### Gênero")
+    st.dataframe(metricas_demo["genero"])
+
+with col2:
+    st.write("### Raça")
+    st.dataframe(metricas_demo["raca"])
+
+with col3:
+    st.write("### Faixa Etária")
+    st.dataframe(metricas_demo["faixa_etaria"])
+
+st.write("### Pessoas com Deficiência")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric("PCD", metricas_demo["pcd"].get("Sim", 0))
+
+with col2:
+    st.metric("Não PCD", metricas_demo["pcd"].get("Não", 0))
