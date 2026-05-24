@@ -2,9 +2,14 @@ import streamlit as st
 from services.cleaning import limpar_dados
 from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
+from services.metrics import (
+    calclular_metricas,
+    calcular_metricas_demograficas,
+    calcular_metricas_economicas,
+    calcular_metricas_atuacao,
+)
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
-from services.metrics import calclular_metricas, calcular_metricas_demograficas, calcular_metricas_economicas
 
 st.set_page_config(page_title="Casa do Artesão", layout="wide")
 
@@ -49,7 +54,7 @@ with col3:
     st.metric("Visitantes", metricas["total_visitantes"])
 
 with col4:
-    st.metric("% MEI", f'{metricas["percentual_mei"]:.1f}%')
+    st.metric("% MEI", f"{metricas['percentual_mei']:.1f}%")
 
 
 # CALCULAR METRICAS DEMOGRAFICAS
@@ -104,3 +109,29 @@ with col3:
 with col4:
     st.subheader("Pensionistas")
     st.dataframe(metricas_economicas["pensionista"])
+
+
+# CALCULAR METRICAS ATUAÇÂO
+metricas_atuacao = calcular_metricas_atuacao(df)
+
+st.subheader("Métricas de Atuação")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.write("### Artesãos por Feira")
+    st.dataframe(metricas_atuacao["feiras"])
+
+with col2:
+    st.write("### Técnicas Mais Utilizadas")
+    st.dataframe(metricas_atuacao["tecnicas"])
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.write("### Produtos Mais Utilizados")
+    st.dataframe(metricas_atuacao["produtos"])
+
+with col4:
+    st.write("### CNAEs Mais Frequentes")
+    st.dataframe(metricas_atuacao["cnaes"])
