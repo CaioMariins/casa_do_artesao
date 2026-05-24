@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap");
+
+/*
+  CASA DO ARTESÃO — SISTEMA VISUAL 60 / 30 / 10
+
+  60% — Base:
+  branco quente, creme e papel
+
+  30% — Secundárias:
+  madeira, argila, azul e verde
+
+  10% — Destaque:
+  terracota e coral
+*/
+
+@theme {
+  /* 60% — Base */
+  --color-base: #fdfbf7;
+  --color-papel: #f3f1e8;
+  --color-creme: #f3f1e8;
+  --color-creme-escuro: #e4e1d0;
+
+  /* 30% — Secundárias */
+  --color-madeira: #886647;
+  --color-madeira-escura: #6a4e32;
+  --color-argila: #886647;
+  --color-argila-escura: #6a4e32;
+
+  --color-azul-casa: #388fa3;
+  --color-azul-profundo: #2a6f80;
+
+  --color-verde-suave: #889a60;
+  --color-verde-profundo: #5e6e3e;
+
+  /* 10% — Destaque */
+  --color-terracota: #d4a574;
+  --color-terracota-forte: #b8845a;
+  --color-terracota-texto: #7a4e28;
+  --color-coral: #e8b871;
+
+  /* Texto */
+  --color-texto: #2e2118;
+  --color-texto-suave: #7a6a54;
+}
+
+:root {
+  --sombra-suave: 0 2px 8px rgba(46, 33, 24, 0.08);
+  --sombra-media: 0 4px 20px rgba(46, 33, 24, 0.12);
+  --sombra-forte: 0 8px 40px rgba(46, 33, 24, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Nunito", Arial, Helvetica, sans-serif;
+  background: #fdfbf7;
+  color: #2e2118;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Faixa artesanal */
+.weave-strip {
+  height: 6px;
+  background: repeating-linear-gradient(
+    90deg,
+    #d4a574 0 14px,
+    #e4e1d0 14px 18px,
+    #889a60 18px 32px,
+    #e4e1d0 32px 36px,
+    #e8b871 36px 50px,
+    #e4e1d0 50px 54px
+  );
+}
+
+/* Cards */
+.card-artesanal {
+  background: #fdfbf7;
+  border: 1px solid rgba(136, 102, 71, 0.18);
+  box-shadow: var(--sombra-suave);
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+
+.card-artesanal:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-media);
+  border-color: rgba(212, 165, 116, 0.55);
+}
+
+/* 10% — botão de destaque */
+.btn-destaque {
+  background: #b8845a;
+  color: #ffffff;
+  box-shadow: 0 3px 0 #7a4e28;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn-destaque:hover {
+  background: #7a4e28;
+}
+
+.btn-destaque:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* 30% — botão secundário */
+.btn-secundario {
+  border: 2px solid #388fa3;
+  color: #2a6f80;
+  background: transparent;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.btn-secundario:hover {
+  background: rgba(56, 143, 163, 0.09);
+  border-color: #2a6f80;
+}
+
+/* Badges */
+.badge-artesanal {
+  background: rgba(212, 165, 116, 0.2);
+  color: #7a4e28;
+  border: 1px solid rgba(212, 165, 116, 0.45);
+}
+
+/* Mapa */
+#map {
+  height: 430px;
+  width: 100%;
+  border-radius: 24px;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 16px;
+}
+
+.leaflet-popup-content {
+  font-size: 14px;
+}
+
+/* Acessibilidade */
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #388fa3;
+  outline-offset: 3px;
+}
+
+/* Animação leve */
+.fade-up {
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
