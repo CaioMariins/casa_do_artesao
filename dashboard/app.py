@@ -4,7 +4,7 @@ from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
-from services.metrics import calclular_metricas, calcular_metricas_demograficas
+from services.metrics import calclular_metricas, calcular_metricas_demograficas, calcular_metricas_economicas
 
 st.set_page_config(page_title="Casa do Artesão", layout="wide")
 
@@ -35,7 +35,7 @@ if df.empty:
 st.dataframe(df.head())
 
 # CRIA CARDS
-
+# CALCULAR METRICAS
 metricas = calclular_metricas(df)
 col1, col2, col3, col4 = st.columns(4)
 
@@ -51,6 +51,8 @@ with col3:
 with col4:
     st.metric("% MEI", f'{metricas["percentual_mei"]:.1f}%')
 
+
+# CALCULAR METRICAS DEMOGRAFICAS
 metricas_demo = calcular_metricas_demograficas(df)
 
 st.subheader("Métricas Demográficas")
@@ -78,3 +80,27 @@ with col1:
 
 with col2:
     st.metric("Não PCD", metricas_demo["pcd"].get("Não", 0))
+
+
+# CALCULAR METRICAS ECONOMICAS
+metricas_economicas = calcular_metricas_economicas(df)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.subheader("Dependência da Renda Artesanal")
+    st.dataframe(metricas_economicas["renda_artesanato"])
+
+with col2:
+    st.subheader("Outra fonte de renda")
+    st.dataframe(metricas_economicas["outra_renda"])
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.subheader("Aposentados")
+    st.dataframe(metricas_economicas["aposentado"])
+
+with col4:
+    st.subheader("Pensionistas")
+    st.dataframe(metricas_economicas["pensionista"])
