@@ -15,3 +15,11 @@ def calclular_metricas(df):
         "total_visitantes": total_visitantes,
         "percentual_mei": percentual_mei
     }
+
+def calcular_metricas_demograficas(df):
+    return {
+        "genero": df["genero"].value_counts().to_dict(),
+        "raca": df["raca"].value_counts().to_dict(),
+        "faixa_etaria": df["faixa_etaria"].value_counts().to_dict(),
+        "pcd": df["pcd"].value_counts().to_dict()
+    }
