@@ -4,9 +4,9 @@ from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
 from services.metrics import (
     calclular_metricas,
+    calcular_metricas_atuacao,
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
-    calcular_metricas_atuacao,
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -37,8 +37,6 @@ else:
 if df.empty:
     st.error("Dataset vazio")
 
-st.dataframe(df.head())
-
 # CRIA CARDS
 # CALCULAR METRICAS
 metricas = calclular_metricas(df)
@@ -55,6 +53,8 @@ with col3:
 
 with col4:
     st.metric("% MEI", f"{metricas['percentual_mei']:.1f}%")
+
+st.metric("Mulheres no Artesanato", f"{metricas['percentual_mulheres']:.1f}%")
 
 
 # CALCULAR METRICAS DEMOGRAFICAS
@@ -76,6 +76,7 @@ with col3:
     st.write("### Faixa Etária")
     st.dataframe(metricas_demo["faixa_etaria"])
 
+
 st.write("### Pessoas com Deficiência")
 
 col1, col2 = st.columns(2)
@@ -93,7 +94,7 @@ metricas_economicas = calcular_metricas_economicas(df)
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Dependência da Renda Artesanal")
+    st.subheader("Fonte de Renda Principal")
     st.dataframe(metricas_economicas["renda_artesanato"])
 
 with col2:

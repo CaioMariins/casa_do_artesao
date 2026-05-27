@@ -8,6 +8,10 @@ def calclular_metricas(df):
 
     total_visitantes = len(df[df["tipo_cadastro"] == "visitante"])
 
+    total_mulheres = df["genero"].str.lower().eq("mulher").sum()
+
+    percentual_mulheres = total_mulheres / total_artesaos * 100
+
     total_mei = len(df[df["mei"] == "Sim"])
 
     percentual_mei = total_mei / total_artesaos * 100
@@ -17,6 +21,7 @@ def calclular_metricas(df):
         "total_fixos": total_fixos,
         "total_visitantes": total_visitantes,
         "percentual_mei": percentual_mei,
+        "percentual_mulheres": percentual_mulheres,
     }
 
 
