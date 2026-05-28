@@ -20,7 +20,7 @@ def criar_colunas_derivadas(df):
             return "18-29"
 
         elif idade < 40:
-            return "30-39"
+           return "30-39"
 
         elif idade < 50:
             return "40-49"
