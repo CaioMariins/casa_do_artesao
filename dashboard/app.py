@@ -4,9 +4,9 @@ from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
 from services.metrics import (
     calclular_metricas,
+    calcular_metricas_atuacao,
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
-    calcular_metricas_atuacao,
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -37,8 +37,7 @@ else:
 if df.empty:
     st.error("Dataset vazio")
 
-st.dataframe(df.head())
-
+st.header("Indicadores Gerais")
 # CRIA CARDS
 # CALCULAR METRICAS
 metricas = calclular_metricas(df)
@@ -56,11 +55,13 @@ with col3:
 with col4:
     st.metric("% MEI", f"{metricas['percentual_mei']:.1f}%")
 
+st.metric("Mulheres no Artesanato", f"{metricas['percentual_mulheres']:.1f}%")
+
 
 # CALCULAR METRICAS DEMOGRAFICAS
-metricas_demo = calcular_metricas_demograficas(df)
+st.header("Perfil Demográfico")
 
-st.subheader("Métricas Demográficas")
+metricas_demo = calcular_metricas_demograficas(df)
 
 col1, col2, col3 = st.columns(3)
 
@@ -76,6 +77,7 @@ with col3:
     st.write("### Faixa Etária")
     st.dataframe(metricas_demo["faixa_etaria"])
 
+
 st.write("### Pessoas com Deficiência")
 
 col1, col2 = st.columns(2)
@@ -88,12 +90,13 @@ with col2:
 
 
 # CALCULAR METRICAS ECONOMICAS
+st.header("Perfil Econômico")
 metricas_economicas = calcular_metricas_economicas(df)
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Dependência da Renda Artesanal")
+    st.subheader("Fonte de Renda Principal")
     st.dataframe(metricas_economicas["renda_artesanato"])
 
 with col2:
@@ -112,6 +115,7 @@ with col4:
 
 
 # CALCULAR METRICAS ATUAÇÂO
+st.header("Atuação dos Artesãos")
 metricas_atuacao = calcular_metricas_atuacao(df)
 
 st.subheader("Métricas de Atuação")
@@ -135,3 +139,25 @@ with col3:
 with col4:
     st.write("### CNAEs Mais Frequentes")
     st.dataframe(metricas_atuacao["cnaes"])
+
+# SIDEBAR
+st.sidebar.title("Casa do Artesão")
+
+st.sidebar.markdown("---")
+
+filtro_feira = st.sidebar.multiselect(
+    "Filtrar por feira",
+    options=df["feira"].unique(),
+    default=df["feira"].unique()
+)
+
+filtro_genero = st.sidebar.multiselect(
+    "Filtro por gênero",
+    options=df["genero"].unique(),
+    default=df["genero"].unique()
+)
+
+df_filtrado = df[
+    (df["feira"].isin(filtro_feira)) &
+    (df["genero"].isin(filtro_genero))
+]
