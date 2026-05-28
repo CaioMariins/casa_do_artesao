@@ -1,3 +1,4 @@
+import plotly.express as px
 import streamlit as st
 from services.cleaning import limpar_dados
 from services.features import criar_colunas_derivadas
@@ -63,20 +64,45 @@ st.header("Perfil Demográfico")
 
 metricas_demo = calcular_metricas_demograficas(df)
 
-col1, col2, col3 = st.columns(3)
+metricas_demo["genero"].columns = ["genero", "quantidade"]
+
+fig_genero = px.pie(
+    metricas_demo["genero"],
+    names="genero",
+    values="quantidade",
+    hole=0.5,
+    title="Distribuição por Gênero",
+)
+
+
+metricas_demo["raca"].columns = ["raca", "quantidade"]
+
+fig_raca = px.bar(
+    metricas_demo["raca"],
+    x="quantidade",
+    y="raca",
+    orientation="h",
+    title="Distribuição por Raça",
+)
+
+
+metricas_demo["faixa_etaria"].columns = ["faixa_etaria", "quantidade"]
+
+fig_faixa = px.bar(
+    metricas_demo["faixa_etaria"],
+    x="faixa_etaria",
+    y="quantidade",
+    title="Distribuição por Faixa Etária",
+)
+
+col1, col2 = st.columns(2)
 
 with col1:
-    st.write("### Gênero")
-    st.dataframe(metricas_demo["genero"])
-
+    st.plotly_chart(fig_genero, use_container_width=True)
 with col2:
-    st.write("### Raça")
-    st.dataframe(metricas_demo["raca"])
+    st.plotly_chart(fig_raca, use_container_width=True)
 
-with col3:
-    st.write("### Faixa Etária")
-    st.dataframe(metricas_demo["faixa_etaria"])
-
+st.plotly_chart(fig_faixa, use_container_width=True)
 
 st.write("### Pessoas com Deficiência")
 
@@ -93,25 +119,60 @@ with col2:
 st.header("Perfil Econômico")
 metricas_economicas = calcular_metricas_economicas(df)
 
+metricas_economicas["renda_artesanato"].columns = ["percentual", "quantidade"]
+
+fig_renda = px.bar(
+    metricas_economicas["renda_artesanato"],
+    x="percentual",
+    y="quantidade",
+    title="Fonte de Renda Principal",
+)
+
+
+metricas_economicas["outra_renda"].columns = ["outra_renda", "quantidade"]
+
+fig_outra_renda = px.pie(
+    metricas_economicas["outra_renda"],
+    names="outra_renda",
+    values="quantidade",
+    hole=0.5,
+    title="Outra Fonte de Renda",
+)
+
+metricas_economicas["aposentado"].columns = ["aposentado", "quantidade"]
+
+fig_aposentado = px.pie(
+    metricas_economicas["aposentado"],
+    names="aposentado",
+    values="quantidade",
+    hole=0.5,
+    title="Aposentados",
+)
+
+
+metricas_economicas["pensionista"].columns = ["pensionista", "quantidade"]
+
+fig_pensionista = px.pie(
+    metricas_economicas["pensionista"],
+    names="pensionista",
+    values="quantidade",
+    hole=0.5,
+    title="Pensionistas",
+)
+
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Fonte de Renda Principal")
-    st.dataframe(metricas_economicas["renda_artesanato"])
-
+    st.plotly_chart(fig_renda, use_container_width=True)
 with col2:
-    st.subheader("Outra fonte de renda")
-    st.dataframe(metricas_economicas["outra_renda"])
+    st.plotly_chart(fig_outra_renda, use_container_width=True)
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.subheader("Aposentados")
-    st.dataframe(metricas_economicas["aposentado"])
-
+    st.plotly_chart(fig_aposentado, use_container_width=True)
 with col4:
-    st.subheader("Pensionistas")
-    st.dataframe(metricas_economicas["pensionista"])
+    st.plotly_chart(fig_pensionista, use_container_width=True)
 
 
 # CALCULAR METRICAS ATUAÇÂO
@@ -146,18 +207,11 @@ st.sidebar.title("Casa do Artesão")
 st.sidebar.markdown("---")
 
 filtro_feira = st.sidebar.multiselect(
-    "Filtrar por feira",
-    options=df["feira"].unique(),
-    default=df["feira"].unique()
+    "Filtrar por feira", options=df["feira"].unique(), default=df["feira"].unique()
 )
 
 filtro_genero = st.sidebar.multiselect(
-    "Filtro por gênero",
-    options=df["genero"].unique(),
-    default=df["genero"].unique()
+    "Filtro por gênero", options=df["genero"].unique(), default=df["genero"].unique()
 )
 
-df_filtrado = df[
-    (df["feira"].isin(filtro_feira)) &
-    (df["genero"].isin(filtro_genero))
-]
+df_filtrado = df[(df["feira"].isin(filtro_feira)) & (df["genero"].isin(filtro_genero))]

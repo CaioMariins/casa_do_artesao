@@ -26,11 +26,19 @@ def calclular_metricas(df):
 
 
 def calcular_metricas_demograficas(df):
+    ordem_faixa = [
+        "18-29",
+        "30-39",
+        "40-49",
+        "50-59",
+        "60+"
+    ]
+
     return {
-        "genero": df["genero"].value_counts().to_dict(),
-        "raca": df["raca"].value_counts().to_dict(),
-        "faixa_etaria": df["faixa_etaria"].value_counts().to_dict(),
-        "pcd": df["pcd"].value_counts().to_dict(),
+        "genero": df["genero"].value_counts().reset_index(),
+        "raca": df["raca"].value_counts().reset_index(),
+        "faixa_etaria": df["faixa_etaria"].value_counts().reindex(ordem_faixa).reset_index(),
+        "pcd": df["pcd"].value_counts().reset_index(),
     }
 
 
@@ -42,14 +50,14 @@ def calcular_metricas_economicas(df):
         df["renda_artesanato"]
         .value_counts()
         .reindex(ordem_renda, fill_value=0)
-        .to_dict()
+        .reset_index()
     )
 
     return {
         "renda_artesanato": renda_artesanato,
-        "outra_renda": df["outra_renda"].value_counts().to_dict(),
-        "aposentado": df["aposentado"].value_counts().to_dict(),
-        "pensionista": df["pensionista"].value_counts().to_dict(),
+        "outra_renda": df["outra_renda"].value_counts().reset_index(),
+        "aposentado": df["aposentado"].value_counts().reset_index(),
+        "pensionista": df["pensionista"].value_counts().reset_index(),
     }
 
 
