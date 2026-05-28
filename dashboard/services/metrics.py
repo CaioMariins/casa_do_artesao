@@ -50,14 +50,14 @@ def calcular_metricas_economicas(df):
         df["renda_artesanato"]
         .value_counts()
         .reindex(ordem_renda, fill_value=0)
-        .to_dict()
+        .reset_index()
     )
 
     return {
         "renda_artesanato": renda_artesanato,
-        "outra_renda": df["outra_renda"].value_counts().to_dict(),
-        "aposentado": df["aposentado"].value_counts().to_dict(),
-        "pensionista": df["pensionista"].value_counts().to_dict(),
+        "outra_renda": df["outra_renda"].value_counts().reset_index(),
+        "aposentado": df["aposentado"].value_counts().reset_index(),
+        "pensionista": df["pensionista"].value_counts().reset_index(),
     }
 
 
