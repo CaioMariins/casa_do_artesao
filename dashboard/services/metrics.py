@@ -73,3 +73,27 @@ def calcular_metricas_atuacao(df):
         "produtos": produtos.value_counts().to_dict(),
         "cnaes": (df[df["tipo_cadastro"] == "fixo"]["cnae"].value_counts().to_dict()),
     }
+
+
+def calcular_metricas_territoriais(df):
+    feira = (
+        df["feira"]
+        .value_counts()
+        .reset_index()
+    )
+
+    feira.columns = [
+        "feira",
+        "quantidade"
+    ]
+
+    genero_por_feira = (
+        df.groupby(["feira", "genero"])
+        .size()
+        .reset_index(name="quantidade")
+    )
+
+    return {
+        "feira": feira,
+        "genero_por_feira": genero_por_feira
+    }

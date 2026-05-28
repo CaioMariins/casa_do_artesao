@@ -8,6 +8,7 @@ from services.metrics import (
     calcular_metricas_atuacao,
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
+    calcular_metricas_territoriais,
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -174,22 +175,44 @@ with col3:
 with col4:
     st.plotly_chart(fig_pensionista, use_container_width=True)
 
+# METRICAS TERRITORIAIS
+st.header("Metricas Territoriais")
+metricas_territoriais = calcular_metricas_territoriais(df)
 
-# CALCULAR METRICAS ATUAÇÂO
-st.header("Atuação dos Artesãos")
-metricas_atuacao = calcular_metricas_atuacao(df)
+metricas_territoriais["feira"].columns = ["feira", "quantidade"]
 
-st.subheader("Métricas de Atuação")
+fig_feira = px.bar(
+    metricas_territoriais["feira"],
+    x="quantidade",
+    y="feira",
+    orientation="h",
+    title="Artesãos por Feira",
+)
+
+
+fig_genero_feira = px.bar(
+    metricas_territoriais["genero_por_feira"],
+    x="feira",
+    y="quantidade",
+    color="genero",
+    barmode="group",
+    title="Distribuição de Gênero por Feira",
+)
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("### Artesãos por Feira")
-    st.dataframe(metricas_atuacao["feiras"])
-
+    st.plotly_chart(fig_feira, use_container_width=True)
 with col2:
-    st.write("### Técnicas Mais Utilizadas")
-    st.dataframe(metricas_atuacao["tecnicas"])
+    st.plotly_chart(fig_genero_feira, use_container_width=True)
+
+# METRICAS ATUAÇÂO
+st.header("Atuação dos Artesãos")
+metricas_atuacao = calcular_metricas_atuacao(df)
+
+
+st.write("### Técnicas Mais Utilizadas")
+st.dataframe(metricas_atuacao["tecnicas"])
 
 col3, col4 = st.columns(2)
 
