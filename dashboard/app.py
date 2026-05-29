@@ -9,6 +9,7 @@ from services.metrics import (
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
     calcular_metricas_territoriais,
+    calcular_metricas_formalizacao
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -227,7 +228,7 @@ fig_produtos = px.bar(
     x="quantidade",
     y="produto",
     orientation="h",
-    title="Produtos Mais Produzidos"
+    title="Produtos Mais Produzidos",
 )
 
 col3, col4 = st.columns(2)
@@ -236,6 +237,29 @@ with col3:
     st.plotly_chart(fig_tecnicas, use_container_width=True)
 with col4:
     st.plotly_chart(fig_produtos, use_container_width=True)
+
+
+st.header("Formalização (MEI)")
+
+metricas_formalizacao = calcular_metricas_formalizacao(df)
+
+fig_mei = px.bar(
+    metricas_formalizacao["mei_por_feira"],
+    x="feira",
+    y="quantidade",
+    color="mei",
+    barmode="group",
+    title="MEI por Feira"
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.metric( "Percentual Geral de MEI", f"{metricas_formalizacao["percentual_mei"]:.1f}%")
+with col2:
+    st.metric("Feira com Mais MEIs", metricas_formalizacao["feira_mais_mei"])
+
+st.plotly_chart(fig_mei, use_container_width=True)
 
 # SIDEBAR
 st.sidebar.title("Casa do Artesão")
