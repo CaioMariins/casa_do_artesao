@@ -68,9 +68,9 @@ def calcular_metricas_atuacao(df):
     produtos = pd.concat([df["produto_1"], df["produto_2"]]).replace("", pd.NA).dropna()
 
     return {
-        "feiras": df["feira"].value_counts().to_dict(),
-        "tecnicas": tecnicas.value_counts().to_dict(),
-        "produtos": produtos.value_counts().to_dict(),
+        "feiras": df["feira"].value_counts().reset_index(),
+        "tecnicas": tecnicas.value_counts().reset_index(),
+        "produtos": produtos.value_counts().reset_index(),
         "cnaes": (df[df["tipo_cadastro"] == "fixo"]["cnae"].value_counts().to_dict()),
     }
 

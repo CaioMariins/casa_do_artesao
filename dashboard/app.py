@@ -210,19 +210,32 @@ with col2:
 st.header("Atuação dos Artesãos")
 metricas_atuacao = calcular_metricas_atuacao(df)
 
+metricas_atuacao["tecnicas"].columns = ["tecnica", "quantidade"]
 
-st.write("### Técnicas Mais Utilizadas")
-st.dataframe(metricas_atuacao["tecnicas"])
+fig_tecnicas = px.bar(
+    metricas_atuacao["tecnicas"],
+    x="quantidade",
+    y="tecnica",
+    orientation="h",
+    title="Técnicas Mais Utilizadas",
+)
+
+metricas_atuacao["produtos"].columns = ["produto", "quantidade"]
+
+fig_produtos = px.bar(
+    metricas_atuacao["produtos"],
+    x="quantidade",
+    y="produto",
+    orientation="h",
+    title="Produtos Mais Produzidos"
+)
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.write("### Produtos Mais Utilizados")
-    st.dataframe(metricas_atuacao["produtos"])
-
+    st.plotly_chart(fig_tecnicas, use_container_width=True)
 with col4:
-    st.write("### CNAEs Mais Frequentes")
-    st.dataframe(metricas_atuacao["cnaes"])
+    st.plotly_chart(fig_produtos, use_container_width=True)
 
 # SIDEBAR
 st.sidebar.title("Casa do Artesão")
