@@ -97,3 +97,29 @@ def calcular_metricas_territoriais(df):
         "feira": feira,
         "genero_por_feira": genero_por_feira
     }
+
+def calcular_metricas_formalizacao(df):
+
+    mei_por_feira = (
+        df.groupby(["feira", "mei"])
+        .size()
+        .reset_index(name="quantidade")
+    )
+
+    percentual_mei = (
+        df["mei"]
+        .eq("Sim")
+        .mean() * 100
+    )
+
+    feira_mais_mei = (
+        df[df["mei"] == "Sim"]["feira"]
+        .value_counts()
+        .idxmax()
+    )
+
+    return {
+        "mei_por_feira": mei_por_feira,
+        "percentual_mei": percentual_mei,
+        "feira_mais_mei": feira_mais_mei
+    }
