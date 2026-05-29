@@ -8,8 +8,9 @@ from services.metrics import (
     calcular_metricas_atuacao,
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
+    calcular_metricas_formalizacao,
     calcular_metricas_territoriais,
-    calcular_metricas_formalizacao
+    calcular_metricas_temporais,
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -249,17 +250,34 @@ fig_mei = px.bar(
     y="quantidade",
     color="mei",
     barmode="group",
-    title="MEI por Feira"
+    title="MEI por Feira",
 )
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric( "Percentual Geral de MEI", f"{metricas_formalizacao["percentual_mei"]:.1f}%")
+    st.metric(
+        "Percentual Geral de MEI", f"{metricas_formalizacao['percentual_mei']:.1f}%"
+    )
 with col2:
     st.metric("Feira com Mais MEIs", metricas_formalizacao["feira_mais_mei"])
 
 st.plotly_chart(fig_mei, use_container_width=True)
+
+
+st.header("Evolução Temporal")
+
+metricas_temporais = calcular_metricas_temporais(df)
+
+fig_temporal = px.line(
+    metricas_temporais["cadastro_por_mes"],
+    x="mes",
+    y="quantidade",
+    markers=True,
+    title="Evolução de Cadastros"
+)
+
+st.plotly_chart(fig_temporal, use_container_width=True)
 
 # SIDEBAR
 st.sidebar.title("Casa do Artesão")

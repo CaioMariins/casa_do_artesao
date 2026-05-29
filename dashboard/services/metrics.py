@@ -123,3 +123,26 @@ def calcular_metricas_formalizacao(df):
         "percentual_mei": percentual_mei,
         "feira_mais_mei": feira_mais_mei
     }
+
+
+def calcular_metricas_temporais(df):
+
+    df = df.copy()
+
+    df = df.dropna(subset=["data_avaliacao"])
+
+    df["mes"] = (
+        df["data_avaliacao"]
+        .dt.to_period("M")
+        .astype(str)
+    )
+
+    cadastro_por_mes = (
+        df.groupby("mes")
+        .size()
+        .reset_index(name="quantidade")
+    )
+
+    return {
+        "cadastro_por_mes": cadastro_por_mes
+    }
