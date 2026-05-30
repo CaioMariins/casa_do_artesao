@@ -1,4 +1,5 @@
 import pandas as pd
+from services.geo import obter_coordenadas
 
 
 def calclular_metricas(df):
@@ -26,18 +27,15 @@ def calclular_metricas(df):
 
 
 def calcular_metricas_demograficas(df):
-    ordem_faixa = [
-        "18-29",
-        "30-39",
-        "40-49",
-        "50-59",
-        "60+"
-    ]
+    ordem_faixa = ["18-29", "30-39", "40-49", "50-59", "60+"]
 
     return {
         "genero": df["genero"].value_counts().reset_index(),
         "raca": df["raca"].value_counts().reset_index(),
-        "faixa_etaria": df["faixa_etaria"].value_counts().reindex(ordem_faixa).reset_index(),
+        "faixa_etaria": df["faixa_etaria"]
+        .value_counts()
+        .reindex(ordem_faixa)
+        .reset_index(),
         "pcd": df["pcd"].value_counts().reset_index(),
     }
 
@@ -76,50 +74,58 @@ def calcular_metricas_atuacao(df):
 
 
 def calcular_metricas_territoriais(df):
-    feira = (
-        df["feira"]
-        .value_counts()
-        .reset_index()
-    )
+    feira = df["feira"].value_counts().reset_index()
 
-    feira.columns = [
-        "feira",
-        "quantidade"
-    ]
+    feira.columns = ["feira", "quantidade"]
 
     genero_por_feira = (
-        df.groupby(["feira", "genero"])
-        .size()
-        .reset_index(name="quantidade")
+        df.groupby(["feira", "genero"]).size().reset_index(name="quantidade")
     )
 
-    return {
-        "feira": feira,
-        "genero_por_feira": genero_por_feira
-    }
+    return {"feira": feira, "genero_por_feira": genero_por_feira}
+
 
 def calcular_metricas_formalizacao(df):
 
-    mei_por_feira = (
-        df.groupby(["feira", "mei"])
-        .size()
-        .reset_index(name="quantidade")
-    )
+    mei_por_feira = df.groupby(["feira", "mei"]).size().reset_index(name="quantidade")
 
-    percentual_mei = (
-        df["mei"]
-        .eq("Sim")
-        .mean() * 100
-    )
+    percentual_mei = df["mei"].eq("Sim").mean() * 100
 
-    feira_mais_mei = (
-        df[df["mei"] == "Sim"]["feira"]
-        .value_counts()
-        .idxmax()
-    )
+    feira_mais_mei = df[df["mei"] == "Sim"]["feira"].value_counts().idxmax()
 
     return {
         "mei_por_feira": mei_por_feira,
         "percentual_mei": percentual_mei,
-        "feira_mais_mei": feira_mais_mei
+        "feira_mais_mei": feira_mais_mei,
     }
+
+
+def calcular_metricas_temporais(df):
+
+    df = df.copy()
+
+    df = df.dropna(subset=["data_avaliacao"])
+
+    df["mes"] = df["data_avaliacao"].dt.to_period("M").astype(str)
+
+    cadastro_por_mes = df.groupby("mes").size().reset_index(name="quantidade")
+
+    return {"cadastro_por_mes": cadastro_por_mes}
+
+def calcular_metricas_geograficas(df):
+
+    cidades = df["cidade"].dropna().str.strip().str.title().value_counts().reset_index()
+
+    cidades.columns = ["cidade", "quantidade"]
+
+    cidades["latitude"] = None
+    cidades["longitude"] = None
+
+    for idx, row in cidades.iterrows():
+        lat, lon = obter_coordenadas(row["cidade"])
+
+        cidades.at[idx, "latitude"] = lat
+        cidades.at[idx, "longitude"] = lon
+    cidades = cidades.dropna(subset=["latitude", "longitude"])
+
+    return cidades

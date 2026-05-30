@@ -1,5 +1,7 @@
 import plotly.express as px
 import streamlit as st
+import folium
+from streamlit_folium import st_folium
 from services.cleaning import limpar_dados
 from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
@@ -8,8 +10,10 @@ from services.metrics import (
     calcular_metricas_atuacao,
     calcular_metricas_demograficas,
     calcular_metricas_economicas,
+    calcular_metricas_formalizacao,
     calcular_metricas_territoriais,
-    calcular_metricas_formalizacao
+    calcular_metricas_temporais,
+    calcular_metricas_geograficas
 )
 from services.normalize import normalizar_dados
 from services.validator import validar_consistencia
@@ -239,6 +243,7 @@ with col4:
     st.plotly_chart(fig_produtos, use_container_width=True)
 
 
+# METRICAS FORMALIZAÇÂO
 st.header("Formalização (MEI)")
 
 metricas_formalizacao = calcular_metricas_formalizacao(df)
@@ -249,17 +254,68 @@ fig_mei = px.bar(
     y="quantidade",
     color="mei",
     barmode="group",
-    title="MEI por Feira"
+    title="MEI por Feira",
 )
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric( "Percentual Geral de MEI", f"{metricas_formalizacao["percentual_mei"]:.1f}%")
+    st.metric(
+        "Percentual Geral de MEI", f"{metricas_formalizacao['percentual_mei']:.1f}%"
+    )
 with col2:
     st.metric("Feira com Mais MEIs", metricas_formalizacao["feira_mais_mei"])
 
 st.plotly_chart(fig_mei, use_container_width=True)
+
+
+# METRICAS TEMPORAIS
+st.header("Evolução Temporal")
+
+metricas_temporais = calcular_metricas_temporais(df)
+
+fig_temporal = px.line(
+    metricas_temporais["cadastro_por_mes"],
+    x="mes",
+    y="quantidade",
+    markers=True,
+    title="Evolução de Cadastros"
+)
+
+st.plotly_chart(fig_temporal, use_container_width=True)
+
+
+# METRICAS GEOGRAFICAS
+
+st.header("Distribuição Geográfica")
+
+metricas_geo = calcular_metricas_geograficas(df)
+
+mapa = folium.Map(
+    location=[-22.90, -43.20],
+    zoom_start=7,
+    tiles="OpenStreetMap"
+)
+
+for _, row in metricas_geo.iterrows():
+    folium.CircleMarker(
+        location=[
+            row["latitude"],
+            row["longitude"]
+        ],
+        radius=row["quantidade"],
+
+        popup=(
+            f"""
+            Cidade: {row["cidade"]}<br>
+            Artesãos: {row["quantidade"]}
+            """
+        ),
+        tooltip=row["cidade"],
+        fill=True
+    ).add_to(mapa)
+
+st_folium(mapa, width="stretch", height=500, returned_objects=[])
 
 # SIDEBAR
 st.sidebar.title("Casa do Artesão")

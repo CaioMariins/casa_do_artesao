@@ -1,8 +1,9 @@
-from faker import Faker
-import pandas as pd
 import random
 
-fake = Faker('pt_BR')
+import pandas as pd
+from faker import Faker
+
+fake = Faker("pt_BR")
 
 registros = []
 
@@ -12,13 +13,23 @@ feiras = [
     "Praça do Zumbi",
     "Praça César Tinoco",
     "Orla de São Francisco",
-    "Largo do Marrão"
+    "Largo do Marrão",
 ]
 
 cidades_rj = [
-    "Rio de Janeiro", "Niterói", "São Gonçalo", "Duque de Caxias", 
-    "Nova Iguaçu", "Campos dos Goytacazes", "Petrópolis", "Volta Redonda", 
-    "Macaé", "Cabo Frio", "Maricá", "Angra dos Reis", "Teresópolis"
+    "Rio de Janeiro",
+    "Niterói",
+    "São Gonçalo",
+    "Duque de Caxias",
+    "Nova Iguaçu",
+    "Campos dos Goytacazes",
+    "Petrópolis",
+    "Volta Redonda",
+    "Macaé",
+    "Cabo Frio",
+    "Maricá",
+    "Angra dos Reis",
+    "Teresópolis",
 ]
 
 tecnicas = {
@@ -27,7 +38,7 @@ tecnicas = {
     "Madeira": "Esculturas",
     "Biscuit": "Miniaturas",
     "Costura": "Roupas",
-    "Pintura": "Quadros"
+    "Pintura": "Quadros",
 }
 
 for i in range(800):
@@ -36,18 +47,20 @@ for i in range(800):
     tipo_cadastro = random.choice(["fixo", "visitante"])
     outra_renda = random.choice([True, False])
     data_nascimento = fake.date_of_birth(minimum_age=34, maximum_age=68)
-    idade = 2026 - data_nascimento.year
+    idade = int(2026 - data_nascimento.year)
 
     registro = {
         "tipo_cadastro": tipo_cadastro,
         "nome": fake.name(),
         "email": fake.email(),
         "telefone": fake.phone_number(),
-        "instagram":f"@{fake.user_name()}",
+        "instagram": f"@{fake.user_name()}",
         "cpf": fake.cpf(),
-        "data_nascimento": data_nascimento,
-        "estado_civil": random.choice(["solteiro(a)", "casado(a)", "viúvo(a)", "divorciado(a)"]),
-        "genero":random.choice(["mulher", "homem", "pessoa trans", "outros"]),
+        "data_nascimento": data_nascimento.strftime("%d/%m/%Y"),
+        "estado_civil": random.choice(
+            ["solteiro(a)", "casado(a)", "viúvo(a)", "divorciado(a)"]
+        ),
+        "genero": random.choice(["mulher", "homem", "pessoa trans", "outros"]),
         "pcd": random.choice([True, False]),
         "endereco": f"{fake.street_address()}, {fake.building_number()}",
         "bairro": fake.bairro(),
@@ -64,13 +77,12 @@ for i in range(800):
         "mei": random.choice([True, False]),
         "cnpj": fake.cnpj(),
         "avaliador": fake.name(),
-        "data_avaliacao": fake.date(pattern="%d/%m/%Y"),
+        "data_avaliacao": fake.date_between(start_date="-20y", end_date="today").strftime("%d/%m/%Y"),
         "tecnica_1": tecnica,
-        "produto_1": tecnicas[tecnica]
+        "produto_1": tecnicas[tecnica],
     }
 
     if random.choice([True, False]):
-
         tecnica_2 = random.choice(list(tecnicas.keys()))
 
         registro["tecnica_2"] = tecnica_2
@@ -79,10 +91,11 @@ for i in range(800):
     else:
         registro["tecnica_2"] = ""
         registro["produto_2"] = ""
-    
 
     if tipo_cadastro == "fixo":
-        registro["raca"] = random.choice(["preto", "pardo", "branco", "amarelo", "indígena"])
+        registro["raca"] = random.choice(
+            ["preto", "pardo", "branco", "amarelo", "indígena"]
+        )
         registro["inscricao_fazenda"] = fake.numerify(text="########")
         registro["inscricao_cgm"] = fake.numerify(text="########")
         registro["numero_barraca"] = fake.bothify(text="A##")

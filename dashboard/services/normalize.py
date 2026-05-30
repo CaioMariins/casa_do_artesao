@@ -1,3 +1,5 @@
+import pandas as pd
+
 def normalizar_dados(df):
 
     df = df.copy()
@@ -47,5 +49,10 @@ def normalizar_dados(df):
     }
 
     df["feira"] = df["feira"].replace(mapa_feiras)
+
+    df["data_avaliacao"] = pd.to_datetime(
+        df["data_avaliacao"],
+        errors="coerce"
+    )
 
     return df
