@@ -11,3 +11,4 @@ secrets.py
 *.xlsx
 *.csv
 *.odt
+node_modules/
