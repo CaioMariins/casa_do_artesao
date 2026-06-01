@@ -3,16 +3,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap");
 
 /*
-  CASA DO ARTESÃO — SISTEMA VISUAL 60 / 30 / 10
-
-  60% — Base:
-  branco quente, creme e papel
-
-  30% — Secundárias:
-  madeira, argila, azul e verde
-
-  10% — Destaque:
-  terracota e coral
+60% — Base:
+branco quente, creme e papel
+30% — Secundárias:
+madeira, argila, azul e verde
+10% — Destaque:
+terracota e coral
 */
 
 @theme {
@@ -76,20 +72,6 @@ h4 {
 img {
   max-width: 100%;
   display: block;
-}
-
-/* Faixa artesanal */
-.weave-strip {
-  height: 6px;
-  background: repeating-linear-gradient(
-    90deg,
-    #d4a574 0 14px,
-    #e4e1d0 14px 18px,
-    #889a60 18px 32px,
-    #e4e1d0 32px 36px,
-    #e8b871 36px 50px,
-    #e4e1d0 50px 54px
-  );
 }
 
 /* Cards */
