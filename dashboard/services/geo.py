@@ -1,26 +1,96 @@
-from geopy.geocoders import Nominatim
-
-geolocator = Nominatim(user_agent="casa_artesao")
-
-CACHE_COORDENADAS = {}
-
-def obter_coordenadas(cidade):
-
-    if cidade in CACHE_COORDENADAS:
-        return CACHE_COORDENADAS[cidade]
-    try:
-        local = geolocator.geocode(f"{cidade}, Rio de Janeiro, Brasil")
-
-        if local:
-            coordenadas = (
-                local.latitude,
-                local.longitude
-            )
-            CACHE_COORDENADAS[cidade] = coordenadas
-            
-            return coordenadas
-
-    except:
-        pass
-
-    return None, None
+coordenadas = {
+    "Angra dos Reis": {"latitude": -23.1555405, "longitude": -44.2344809},
+    "Aperibé": {"latitude": -21.653159, "longitude": -42.1329659},
+    "Araruama": {"latitude": -22.7446908, "longitude": -42.3231292},
+    "Areal": {"latitude": -22.2314922, "longitude": -43.1056264},
+    "Armação dos Búzios": {"latitude": -22.7597805, "longitude": -41.8875267},
+    "Arraial do Cabo": {"latitude": -22.9662839, "longitude": -42.024427},
+    "Barra do Piraí": {"latitude": -22.4242691, "longitude": -43.8935244},
+    "Barra Mansa": {"latitude": -22.5427739, "longitude": -44.1691871},
+    "Belford Roxo": {"latitude": -22.7309996, "longitude": -43.3796377},
+    "Bom Jardim": {"latitude": -22.1515328, "longitude": -42.4186683},
+    "Bom Jesus do Itabapoana": {"latitude": -21.090552, "longitude": -41.7808736},
+    "Cabo Frio": {"latitude": -22.7378309, "longitude": -42.0240869},
+    "Cachoeiras de Macacu": {"latitude": -22.4626861, "longitude": -42.6534414},
+    "Cambuci": {"latitude": -21.4835902, "longitude": -41.907113},
+    "Carapebus": {"latitude": -22.2041702, "longitude": -41.6509588},
+    "Comendador Levy Gasparian": {"latitude": -22.0534699, "longitude": -43.2511049},
+    "Campos dos Goytacazes": {"latitude": -21.7546, "longitude": -41.3242},
+    "Cantagalo": {"latitude": -21.9815, "longitude": -42.3645},
+    "Cardoso Moreira": {"latitude": -21.5366664, "longitude": -41.5029962},
+    "Carmo": {"latitude": -21.8921796, "longitude": -42.5723319},
+    "Casimiro de Abreu": {"latitude": -22.4756154, "longitude": -42.1522235},
+    "Conceição de Macabu": {"latitude": -22.0832, "longitude": -41.8736},
+    "Cordeiro": {"latitude": -22.0282236, "longitude": -42.3614094},
+    "Duas Barras": {"latitude": -22.0351374, "longitude": -42.4901782},
+    "Duque de Caxias": {"latitude": -22.7896225, "longitude": -43.309929},
+    "Engenheiro Paulo de Frontin": {"latitude": -22.5201423, "longitude": -43.6348984},
+    "Guapimirim": {"latitude": -22.5266308, "longitude": -42.9790687},
+    "Iguaba Grande": {"latitude": -22.8388498, "longitude": -42.2286746},
+    "Itaboraí": {"latitude": -22.7558128, "longitude": -42.8829561},
+    "Itaguaí": {"latitude": -22.8122697, "longitude": -43.823563},
+    "Italva": {"latitude": -21.4568539, "longitude": -41.6457486},
+    "Itaocara": {"latitude": -21.7289291, "longitude": -42.0897294},
+    "Itaperuna": {"latitude": -21.215816, "longitude": -41.879813},
+    "Itatiaia": {"latitude": -22.4431534, "longitude": -44.5635213},
+    "Japeri": {"latitude": -22.6427642, "longitude": -43.6533831},
+    "Laje do Muriaé": {"latitude": -21.2082595, "longitude": -42.1226959},
+    "Macaé": {"latitude": -22.2828305, "longitude": -41.9649091},
+    "Macuco": {"latitude": -21.9849747, "longitude": -42.2539464},
+    "Magé": {"latitude": -22.6042779, "longitude": -43.1081091},
+    "Mangaratiba": {"latitude": -22.9415964, "longitude": -44.1181916},
+    "Maricá": {"latitude": -22.9088758, "longitude": -42.8171914},
+    "Mendes": {"latitude": -22.5269113, "longitude": -43.7332604},
+    "Mesquita": {"latitude": -22.802535, "longitude": -43.460259},
+    "Miguel Pereira": {"latitude": -22.5309482, "longitude": -43.5166051},
+    "Miracema": {"latitude": -21.3899863, "longitude": -42.1404096},
+    "Natividade": {"latitude": -21.0426488, "longitude": -41.9409815},
+    "Nilópolis": {"latitude": -22.8080114, "longitude": -43.4138222},
+    "Niterói": {"latitude": -22.8884, "longitude": -43.1147},
+    "Nova Friburgo": {"latitude": -22.3061661, "longitude": -42.4934183},
+    "Nova Iguaçu": {"latitude": -22.6955964, "longitude": -43.4654372},
+    "Paracambi": {"latitude": -22.6109158, "longitude": -43.7096912},
+    "Paraíba do Sul": {"latitude": -22.1873955, "longitude": -43.3034613},
+    "Paraty": {"latitude": -23.2196461, "longitude": -44.7154196},
+    "Paty do Alferes": {"latitude": -22.3775383, "longitude": -43.3970506},
+    "Petrópolis": {"latitude": -22.3880004, "longitude": -43.1752593},
+    "Pinheiral": {"latitude": -22.5382687, "longitude": -43.9802609},
+    "Piraí": {"latitude": -22.6550811, "longitude": -43.9193061},
+    "Porciúncula": {"latitude": -20.8956337, "longitude": -41.9332211},
+    "Porto Real": {"latitude": -22.4195607, "longitude": -44.2896491},
+    "Quatis": {"latitude": -22.3625932, "longitude": -44.2495086},
+    "Queimados": {"latitude": -22.7313419, "longitude": -43.5913151},
+    "Quissamã": {"latitude": -22.107205, "longitude": -41.4723411},
+    "Resende": {"latitude": -22.4418699, "longitude": -44.4204847},
+    "Rio Bonito": {"latitude": -22.7114605, "longitude": -42.6241606},
+    "Rio Claro": {"latitude": -22.7857402, "longitude": -44.0742668},
+    "Rio das Flores": {"latitude": -22.1661122, "longitude": -43.5853593},
+    "Rio das Ostras": {"latitude": -22.5269448, "longitude": -41.944972},
+    "Rio de Janeiro": {"latitude": -22.9110137, "longitude": -43.2093727},
+    "Santa Maria Madalena": {"latitude": -21.9518563, "longitude": -41.9000248},
+    "Santo Antônio de Pádua": {"latitude": -21.539, "longitude": -42.1816},
+    "São Francisco de Itabapoana": {"latitude": -21.4537437, "longitude": -41.1452982},
+    "São Fidélis": {"latitude": -21.6712726, "longitude": -41.7888835},
+    "São Gonçalo": {"latitude": -22.8219014, "longitude": -43.0309252},
+    "São João da Barra": {"latitude": -21.7649506, "longitude": -41.0961685},
+    "São João de Meriti": {"latitude": -22.8043744, "longitude": -43.3724125},
+    "São José de Ubá": {"latitude": -21.3886117, "longitude": -41.9653881},
+    "São José do Vale do Rio Preto": {
+        "latitude": -22.1509994,
+        "longitude": -42.9239986,
+    },
+    "São Pedro da Aldeia": {"latitude": -22.8384835, "longitude": -42.1031604},
+    "São Sebastião do Alto": {"latitude": -21.9555, "longitude": -42.1347},
+    "Sapucaia": {"latitude": -21.9946569, "longitude": -42.9137975},
+    "Saquarema": {"latitude": -22.9257974, "longitude": -42.507633},
+    "Seropédica": {"latitude": -22.751834, "longitude": -43.7082554},
+    "Silva Jardim": {"latitude": -22.5687871, "longitude": -42.3915444},
+    "Sumidouro": {"latitude": -22.1179452, "longitude": -42.6807717},
+    "Tanguá": {"latitude": -22.7353777, "longitude": -42.7202272},
+    "Teresópolis": {"latitude": -22.2978038, "longitude": -42.8646411},
+    "Trajano de Moraes": {"latitude": -22.1555839, "longitude": -42.1594703},
+    "Três Rios": {"latitude": -22.1201732, "longitude": -43.1072134},
+    "Valença": {"latitude": -22.2461028, "longitude": -43.6996917},
+    "Varre-Sai": {"latitude": -20.893906, "longitude": -41.8382802},
+    "Vassouras": {"latitude": -22.3706473, "longitude": -43.592331},
+}
