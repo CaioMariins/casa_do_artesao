@@ -1,3 +1,4 @@
+
 coordenadas = {
     "Angra dos Reis": {"latitude": -23.1555405, "longitude": -44.2344809},
     "Aperibé": {"latitude": -21.653159, "longitude": -42.1329659},
