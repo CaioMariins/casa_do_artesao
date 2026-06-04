@@ -23,23 +23,33 @@ from streamlit_folium import st_folium
 # ============================================================================
 # CONFIGURAÇÃO DE TEMAS E ESTILOS
 # ============================================================================
-PALETAS_COR = {
-    "demografico": ["#FF6B9D", "#C44569", "#4ECDC4", "#44A08D", "#95E1D3"],
-    "economico": ["#0066CC", "#003D99", "#004D7A", "#008793", "#00D4FF"],
-    "territorial": ["#8B4513", "#D2691E", "#CD853F", "#DAA520", "#FFD700"],
-    "atuacao": ["#6C63FF", "#9C89B8", "#DDA15E", "#BC6C25", "#FEFAE0"],
-    "formalizacao": ["#2ECC71", "#27AE60", "#F39C12", "#E67E22", "#E74C3C"],
-    "temporal": ["#3498DB", "#2980B9", "#34495E", "#95A5A6", "#7F8C8D"],
+CORES_GENERO = {
+    "Homem": "#4E79A7",
+    "Mulher": "#E15759",
+    "Outros": "#BAB0AC",
 }
 
-TEMPLATES = {
-    "demografico": "plotly",
-    "economico": "plotly_white",
-    "territorial": "plotly",
-    "atuacao": "plotly_white",
-    "formalizacao": "plotly",
-    "temporal": "plotly_white",
+COR_PADRAO = "#E09A59"
+
+CORES_PIRAMIDE = {
+    "Homem": "#4E79A7",
+    "Mulher": "#E15759",
 }
+
+CORES_SIM_NAO = {
+    "Sim": "#59A14F",
+    "Não": "#E15759",
+}
+
+CORES_RACA = {
+    "branco": "#BACFE6",
+    "pardo": "#F28E2B",
+    "preto": "#9C755F",
+    "amarelo": "#EDC948",
+    "indígena": "#59A14F",
+    "Não informado": "#BAB0AC",
+}
+TEMPLATE_PADRAO = "plotly_white"
 
 # ============================================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -90,10 +100,7 @@ df_filtrado = df[
     & (df["mei"].isin(filtro_mei))
 ]
 
-st.sidebar.metric(
-    "Artesãos filtrados",
-    len(df_filtrado)
-)
+st.sidebar.metric("Artesãos filtrados", len(df_filtrado))
 
 # ============================================================================
 # VALIDAÇÃO DE DADOS
@@ -132,6 +139,8 @@ with col4:
 
 st.metric("Mulheres no Artesanato", f"{metricas['percentual_mulheres']:.1f}%")
 
+st.divider()
+
 
 # ============================================================================
 # PERFIL DEMOGRÁFICO
@@ -142,66 +151,118 @@ metricas_demo = calcular_metricas_demograficas(df_filtrado)
 
 metricas_demo["genero"].columns = ["genero", "quantidade"]
 
-fig_genero = px.pie(
-    metricas_demo["genero"],
-    names="genero",
-    values="quantidade",
-    hole=0.4,
-    title="Distribuição por Gênero",
-    color_discrete_sequence=PALETAS_COR["demografico"],
+# Ordenar por quantidade
+metricas_demo["genero"] = metricas_demo["genero"].sort_values(
+    "quantidade", ascending=True
 )
+
+# Calcular porcentagem
+metricas_demo["genero"]["porcentagem"] = (
+    metricas_demo["genero"]["quantidade"]
+    / metricas_demo["genero"]["quantidade"].sum()
+    * 100
+).round(1)
+
+maximo = metricas_demo["genero"]["quantidade"].max()
+
+fig_genero = px.bar(
+    metricas_demo["genero"],
+    x="quantidade",
+    y="genero",
+    orientation="h",
+    title="Distribuição por Gênero",
+)
+
 fig_genero.update_traces(
-    textposition="inside",
-    textinfo="percent+label",
-    hovertemplate="<b>%{label}</b><br>Quantidade: %{value}<br>Percentual: %{percent}<extra></extra>",
+    text=metricas_demo["genero"].apply(
+        lambda row: f"{row['quantidade']} ({row['porcentagem']}%)", axis=1
+    ),
+    textposition="outside",
+    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    customdata=metricas_demo["genero"]["porcentagem"],
+    marker_color=[CORES_GENERO[g] for g in metricas_demo["genero"]["genero"]],
 )
 fig_genero.update_layout(
-    template=TEMPLATES["demografico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=12),
     margin=dict(l=10, r=10, t=40, b=10),
-    showlegend=True,
+    showlegend=False,
     height=400,
 )
+fig_genero.update_xaxes(range=[0, maximo * 1.25])
 
 metricas_demo["raca"].columns = ["raca", "quantidade"]
+metricas_demo["raca"] = metricas_demo["raca"].sort_values("quantidade", ascending=True)
 
+
+# Calcular porcentagem
+metricas_demo["raca"]["percentual"] = (
+    metricas_demo["raca"]["quantidade"]
+    / metricas_demo["raca"]["quantidade"].sum()
+    * 100
+).round(1)
+
+metricas_demo["raca"]["percentual_texto"] = (
+    metricas_demo["raca"]["percentual"].astype(str) + "%"
+)
 fig_raca = px.bar(
     metricas_demo["raca"],
-    x="quantidade",
+    x="percentual",
     y="raca",
     orientation="h",
-    title="Distribuição por Raça",
-    color="quantidade",
-    color_continuous_scale="Viridis",
+    title="Distribuição por Raça/cor",
 )
 fig_raca.update_traces(
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<extra></extra>",
+    text=metricas_demo["raca"]["percentual_texto"],
+    textposition="auto",
+    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    marker_color=[CORES_RACA[g] for g in metricas_demo["raca"]["raca"]],
 )
 fig_raca.update_layout(
-    template=TEMPLATES["demografico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=80, r=20, t=40, b=10),
+    margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
     height=350,
-    xaxis_title="Quantidade",
+    xaxis_title="Percentual",
     yaxis_title="",
 )
 
+fig_raca.update_xaxes(range=[0, 100], ticksuffix="%")
+
 metricas_demo["faixa_etaria"].columns = ["faixa_etaria", "quantidade"]
 
-fig_faixa = px.bar(
-    metricas_demo["faixa_etaria"],
-    x="faixa_etaria",
-    y="quantidade",
-    title="Distribuição por Faixa Etária",
-    color="quantidade",
-    color_continuous_scale="Blues",
+df_piramide = df_filtrado[df_filtrado["genero"].isin(["Homem", "Mulher"])]
+piramide = (
+    df_piramide.groupby(["faixa_etaria", "genero"])
+    .size()
+    .reset_index(name="quantidade")
 )
-fig_faixa.update_traces(
-    hovertemplate="<b>%{x}</b><br>Quantidade: %{y}<extra></extra>",
+
+piramide["quantidade_exibicao"] = piramide["quantidade"].abs()
+
+piramide.loc[piramide["genero"] == "Homem", "quantidade"] *= -1
+
+fig_piramide = px.bar(
+    piramide,
+    x="quantidade",
+    y="faixa_etaria",
+    color="genero",
+    custom_data=["quantidade_exibicao"],
+    orientation="h",
+    barmode="relative",
+    category_orders={"faixa_etaria": ["18-29", "30-39", "40-49", "50-59", "60+"]},
+    title="Pirâmide Etária",
 )
-fig_faixa.update_layout(
-    template=TEMPLATES["demografico"],
+fig_piramide.for_each_trace(
+    lambda trace: trace.update(marker_color=CORES_PIRAMIDE[trace.name])
+)
+
+fig_piramide.update_traces(
+    hovertemplate="Faixa: %{y}<br>Quantidade: %{customdata}<extra></extra>",
+)
+fig_piramide.update_layout(
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
@@ -210,14 +271,41 @@ fig_faixa.update_layout(
     yaxis_title="Quantidade",
 )
 
-col1, col2 = st.columns(2)
+fig_piramide.update_xaxes(
+    tickvals=[-50, -25, 0, 25, 50], ticktext=["50", "25", "0", "25", "50"]
+)
+
+# Adicionar anotações indicando Homem e Mulher
+fig_piramide.add_annotation(
+    text="<b>Homem</b>",
+    x=-50,
+    y=1.08,
+    xref="x",
+    yref="paper",
+    showarrow=False,
+    font=dict(size=13, color="#FFFFFF"),
+)
+
+fig_piramide.add_annotation(
+    text="<b>Mulher</b>",
+    x=50,
+    y=1.08,
+    xref="x",
+    yref="paper",
+    showarrow=False,
+    font=dict(size=13, color="#FFFFFF"),
+)
+
+col1, espaco, col2 = st.columns([1, 0.1, 1])
 
 with col1:
     st.plotly_chart(fig_genero, use_container_width=True)
 with col2:
     st.plotly_chart(fig_raca, use_container_width=True)
 
-st.plotly_chart(fig_faixa, use_container_width=True)
+st.divider()
+st.plotly_chart(fig_piramide, width="stretch")
+st.divider()
 
 st.write("### Pessoas com Deficiência")
 
@@ -228,7 +316,7 @@ with col1:
 
 with col2:
     st.metric("Não PCD", metricas_demo["pcd"].get("Não", 0))
-
+st.divider()
 
 # ============================================================================
 # PERFIL ECONÔMICO
@@ -238,18 +326,24 @@ metricas_economicas = calcular_metricas_economicas(df_filtrado)
 
 metricas_economicas["renda_artesanato"].columns = ["percentual", "quantidade"]
 
+metricas_economicas["renda_artesanato"]["percentual"] = (
+    metricas_economicas["renda_artesanato"]["percentual"].astype(str) + "%"
+)
+
+maximo = metricas_economicas["renda_artesanato"]["quantidade"].max()
+
 fig_renda = px.bar(
     metricas_economicas["renda_artesanato"],
     x="percentual",
     y="quantidade",
-    title="Fonte de Renda Principal",
-    color_discrete_sequence=PALETAS_COR["economico"],
+    title="Participação do Artesanato na Renda",
 )
 fig_renda.update_traces(
     hovertemplate="<b>%{x}%</b><br>Quantidade: %{y}<extra></extra>",
+    marker_color=COR_PADRAO,
 )
 fig_renda.update_layout(
-    template=TEMPLATES["economico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
@@ -257,91 +351,152 @@ fig_renda.update_layout(
     xaxis_title="Percentual de Renda",
     yaxis_title="Quantidade",
 )
+fig_renda.update_yaxes(range=[0, maximo * 1.15])
+
 
 metricas_economicas["outra_renda"].columns = ["outra_renda", "quantidade"]
+metricas_economicas["outra_renda"] = metricas_economicas["outra_renda"].sort_values(
+    "quantidade", ascending=True
+)
 
-fig_outra_renda = px.pie(
+maximo = metricas_economicas["outra_renda"]["quantidade"].max()
+
+# Calcular porcentagem
+metricas_economicas["outra_renda"]["porcentagem"] = (
+    metricas_economicas["outra_renda"]["quantidade"]
+    / metricas_economicas["outra_renda"]["quantidade"].sum()
+    * 100
+).round(1)
+
+fig_outra_renda = px.bar(
     metricas_economicas["outra_renda"],
-    names="outra_renda",
-    values="quantidade",
-    hole=0.35,
+    x="quantidade",
+    y="outra_renda",
+    orientation="h",
     title="Outra Fonte de Renda",
-    color_discrete_sequence=PALETAS_COR["economico"],
 )
 fig_outra_renda.update_traces(
+    text=metricas_economicas["outra_renda"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="auto",
-    textinfo="percent+label",
-    hovertemplate="<b>%{label}</b><br>Quantidade: %{value}<br>Percentual: %{percent}<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    customdata=metricas_economicas["outra_renda"]["porcentagem"],
+    marker_color=[
+        CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
+    ],
 )
 fig_outra_renda.update_layout(
-    template=TEMPLATES["economico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=10, r=10, t=40, b=10),
-    showlegend=True,
-    height=380,
+    margin=dict(l=120, r=20, t=40, b=10),
+    showlegend=False,
+    height=350,
+    xaxis_title="Quantidade",
+    yaxis_title="",
 )
+fig_outra_renda.update_xaxes(range=[0, maximo * 1.15])
 
 metricas_economicas["aposentado"].columns = ["aposentado", "quantidade"]
+metricas_economicas["aposentado"] = metricas_economicas["aposentado"].sort_values(
+    "quantidade", ascending=True
+)
 
-fig_aposentado = px.pie(
+maximo = metricas_economicas["aposentado"]["quantidade"].max()
+
+# Calcular porcentagem
+metricas_economicas["aposentado"]["porcentagem"] = (
+    metricas_economicas["aposentado"]["quantidade"]
+    / metricas_economicas["aposentado"]["quantidade"].sum()
+    * 100
+).round(1)
+
+fig_aposentado = px.bar(
     metricas_economicas["aposentado"],
-    names="aposentado",
-    values="quantidade",
-    hole=0.35,
+    x="quantidade",
+    y="aposentado",
+    orientation="h",
     title="Aposentados",
     color_discrete_sequence=["#27AE60", "#E74C3C"],
 )
 fig_aposentado.update_traces(
+    text=metricas_economicas["aposentado"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="auto",
-    textinfo="percent+label",
-    hovertemplate="<b>%{label}</b><br>Quantidade: %{value}<br>Percentual: %{percent}<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    customdata=metricas_economicas["aposentado"]["porcentagem"],
+    marker_color=[
+        CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
+    ],
 )
 fig_aposentado.update_layout(
-    template=TEMPLATES["economico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=10, r=10, t=40, b=10),
-    showlegend=True,
-    height=380,
+    margin=dict(l=100, r=20, t=40, b=10),
+    showlegend=False,
+    height=350,
+    xaxis_title="Quantidade",
+    yaxis_title="",
 )
+fig_aposentado.update_xaxes(range=[0, maximo * 1.15])
 
 metricas_economicas["pensionista"].columns = ["pensionista", "quantidade"]
+metricas_economicas["pensionista"] = metricas_economicas["pensionista"].sort_values(
+    "quantidade", ascending=True
+)
 
-fig_pensionista = px.pie(
+maximo = metricas_economicas["pensionista"]["quantidade"].max()
+
+# Calcular porcentagem
+metricas_economicas["pensionista"]["porcentagem"] = (
+    metricas_economicas["pensionista"]["quantidade"]
+    / metricas_economicas["pensionista"]["quantidade"].sum()
+    * 100
+).round(1)
+
+fig_pensionista = px.bar(
     metricas_economicas["pensionista"],
-    names="pensionista",
-    values="quantidade",
-    hole=0.35,
+    x="quantidade",
+    y="pensionista",
+    orientation="h",
     title="Pensionistas",
     color_discrete_sequence=["#3498DB", "#F39C12"],
 )
 fig_pensionista.update_traces(
+    text=metricas_economicas["pensionista"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="auto",
-    textinfo="percent+label",
-    hovertemplate="<b>%{label}</b><br>Quantidade: %{value}<br>Percentual: %{percent}<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    customdata=metricas_economicas["pensionista"]["porcentagem"],
+    marker_color=[
+        CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
+    ],
 )
 fig_pensionista.update_layout(
-    template=TEMPLATES["economico"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=10, r=10, t=40, b=10),
-    showlegend=True,
-    height=380,
+    margin=dict(l=100, r=20, t=40, b=10),
+    showlegend=False,
+    height=350,
+    xaxis_title="Quantidade",
+    yaxis_title="",
 )
+fig_pensionista.update_xaxes(range=[0, maximo * 1.15])
 
-col1, col2 = st.columns(2)
+
+col1, espaco, col2 = st.columns([1, 0.1, 1])
 
 with col1:
     st.plotly_chart(fig_renda, use_container_width=True)
 with col2:
     st.plotly_chart(fig_outra_renda, use_container_width=True)
 
-col3, col4 = st.columns(2)
+st.divider()
+
+col3, espaco, col4 = st.columns([1, 0.1, 1])
 
 with col3:
     st.plotly_chart(fig_aposentado, use_container_width=True)
 with col4:
     st.plotly_chart(fig_pensionista, use_container_width=True)
 
-
+st.divider()
 # ============================================================================
 # MÉTRICAS TERRITORIAIS
 # ============================================================================
@@ -350,20 +505,25 @@ metricas_territoriais = calcular_metricas_territoriais(df_filtrado)
 
 metricas_territoriais["feira"].columns = ["feira", "quantidade"]
 
+metricas_territoriais["feira"] = metricas_territoriais["feira"].sort_values(
+    "quantidade", ascending=True
+)
+
+maximo = metricas_territoriais["feira"]["quantidade"].max()
+
 fig_feira = px.bar(
     metricas_territoriais["feira"],
     x="quantidade",
     y="feira",
     orientation="h",
     title="Artesãos por Feira",
-    color="quantidade",
-    color_continuous_scale="Oranges",
 )
 fig_feira.update_traces(
     hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<extra></extra>",
+    marker_color=COR_PADRAO,
 )
 fig_feira.update_layout(
-    template=TEMPLATES["territorial"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=100, r=20, t=40, b=10),
     showlegend=False,
@@ -371,6 +531,8 @@ fig_feira.update_layout(
     xaxis_title="Quantidade",
     yaxis_title="",
 )
+fig_feira.update_xaxes(range=[0, maximo * 1.35])
+
 
 fig_genero_feira = px.bar(
     metricas_territoriais["genero_por_feira"],
@@ -379,13 +541,13 @@ fig_genero_feira = px.bar(
     color="genero",
     barmode="group",
     title="Distribuição de Gênero por Feira",
-    color_discrete_sequence=["#FF69B4", "#4169E1"],
+    color_discrete_map=CORES_GENERO,
 )
 fig_genero_feira.update_traces(
     hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>",
 )
 fig_genero_feira.update_layout(
-    template=TEMPLATES["territorial"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=50, r=20, t=40, b=30),
     height=380,
@@ -393,14 +555,16 @@ fig_genero_feira.update_layout(
     yaxis_title="Quantidade",
     legend=dict(title="Gênero", orientation="v", x=1.02, y=1),
 )
+fig_genero_feira.update_yaxes(range=[0, maximo * 0.90])
 
-col1, col2 = st.columns(2)
+col1, espaco, col2 = st.columns([1, 0.1, 1])
 
 with col1:
     st.plotly_chart(fig_feira, use_container_width=True)
 with col2:
     st.plotly_chart(fig_genero_feira, use_container_width=True)
 
+st.divider()
 
 # ============================================================================
 # ATUAÇÃO DOS ARTESÃOS
@@ -409,60 +573,85 @@ st.header("Atuação dos Artesãos")
 metricas_atuacao = calcular_metricas_atuacao(df_filtrado)
 
 metricas_atuacao["tecnicas"].columns = ["tecnica", "quantidade"]
+metricas_atuacao["tecnicas"] = metricas_atuacao["tecnicas"].sort_values(
+    "quantidade", ascending=True
+)
+
+# Calcular porcentagem para técnicas
+metricas_atuacao["tecnicas"]["porcentagem"] = (
+    metricas_atuacao["tecnicas"]["quantidade"]
+    / metricas_atuacao["tecnicas"]["quantidade"].sum()
+    * 100
+).round(1)
+
 
 fig_tecnicas = px.bar(
     metricas_atuacao["tecnicas"],
-    x="quantidade",
+    x="porcentagem",
     y="tecnica",
     orientation="h",
     title="Técnicas Mais Utilizadas",
-    color="quantidade",
-    color_continuous_scale="Purples",
 )
 fig_tecnicas.update_traces(
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<extra></extra>",
+    text=metricas_atuacao["tecnicas"]["porcentagem"].apply(lambda x: f"{x}%"),
+    textposition="auto",
+    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    marker_color=COR_PADRAO,
 )
 fig_tecnicas.update_layout(
-    template=TEMPLATES["atuacao"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=120, r=20, t=40, b=10),
+    margin=dict(l=80, r=40, t=40, b=10),
     showlegend=False,
     height=400,
-    xaxis_title="Quantidade",
+    xaxis_title="Percentual",
     yaxis_title="",
 )
+fig_tecnicas.update_xaxes(range=[0, 100], ticksuffix="%")
 
 metricas_atuacao["produtos"].columns = ["produto", "quantidade"]
+metricas_atuacao["produtos"] = metricas_atuacao["produtos"].sort_values(
+    "quantidade", ascending=True
+)
+
+# Calcular porcentagem para produtos
+metricas_atuacao["produtos"]["porcentagem"] = (
+    metricas_atuacao["produtos"]["quantidade"]
+    / metricas_atuacao["produtos"]["quantidade"].sum()
+    * 100
+).round(1)
 
 fig_produtos = px.bar(
     metricas_atuacao["produtos"],
-    x="quantidade",
+    x="porcentagem",
     y="produto",
     orientation="h",
     title="Produtos Mais Produzidos",
-    color="quantidade",
-    color_continuous_scale="RdYlGn",
 )
 fig_produtos.update_traces(
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<extra></extra>",
+    text=metricas_atuacao["produtos"]["porcentagem"].apply(lambda x: f"{x}%"),
+    textposition="auto",
+    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    marker_color=COR_PADRAO,
 )
 fig_produtos.update_layout(
-    template=TEMPLATES["atuacao"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
-    margin=dict(l=150, r=20, t=40, b=10),
+    margin=dict(l=80, r=40, t=40, b=10),
     showlegend=False,
     height=400,
-    xaxis_title="Quantidade",
+    xaxis_title="Percentual",
     yaxis_title="",
 )
+fig_produtos.update_xaxes(range=[0, 100], ticksuffix="%")
 
-col3, col4 = st.columns(2)
+col3, espaco, col4 = st.columns([1, 0.1, 1])
 
 with col3:
     st.plotly_chart(fig_tecnicas, use_container_width=True)
 with col4:
     st.plotly_chart(fig_produtos, use_container_width=True)
-
+st.divider()
 
 # ============================================================================
 # FORMALIZAÇÃO (MEI)
@@ -471,6 +660,8 @@ st.header("Formalização (MEI)")
 
 metricas_formalizacao = calcular_metricas_formalizacao(df_filtrado)
 
+maximo = metricas_formalizacao["mei_por_feira"]["quantidade"].max()
+
 fig_mei = px.bar(
     metricas_formalizacao["mei_por_feira"],
     x="feira",
@@ -478,13 +669,13 @@ fig_mei = px.bar(
     color="mei",
     barmode="group",
     title="MEI por Feira",
-    color_discrete_map={"Sim": "#27AE60", "Não": "#E74C3C"},
+    color_discrete_map=CORES_SIM_NAO,
 )
 fig_mei.update_traces(
     hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>",
 )
 fig_mei.update_layout(
-    template=TEMPLATES["formalizacao"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=50, r=20, t=40, b=30),
     height=400,
@@ -492,6 +683,7 @@ fig_mei.update_layout(
     yaxis_title="Quantidade",
     legend=dict(title="MEI", orientation="h", x=0.5, y=1.1),
 )
+fig_mei.update_yaxes(range=[0, maximo * 1.15])
 
 col1, col2 = st.columns(2)
 
@@ -501,9 +693,11 @@ with col1:
     )
 with col2:
     st.metric("Feira com Mais MEIs", metricas_formalizacao["feira_mais_mei"])
+st.divider()
 
 st.plotly_chart(fig_mei, use_container_width=True)
 
+st.divider()
 
 # ============================================================================
 # EVOLUÇÃO TEMPORAL
@@ -528,7 +722,7 @@ fig_temporal.update_traces(
     fillcolor="rgba(52, 152, 219, 0.2)",
 )
 fig_temporal.update_layout(
-    template=TEMPLATES["temporal"],
+    template=TEMPLATE_PADRAO,
     font=dict(family="Arial, sans-serif", size=11),
     margin=dict(l=50, r=20, t=40, b=30),
     height=400,
@@ -539,7 +733,7 @@ fig_temporal.update_layout(
 )
 
 st.plotly_chart(fig_temporal, use_container_width=True)
-
+st.divider()
 
 # ============================================================================
 # DISTRIBUIÇÃO GEOGRÁFICA

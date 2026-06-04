@@ -54,8 +54,17 @@ def calcular_metricas_demograficas(df):
         .value_counts()
         .reindex(ordem_faixa)
         .reset_index(),
-        "pcd": df["pcd"].value_counts().reset_index(),
+        "pcd": df["pcd"].value_counts().to_dict(),
     }
+
+
+def calcular_piramide_etaria(df):
+
+    piramide = (
+        df.groupby(["faixa_etaria", "genero"]).size().reset_index(name="quantidade")
+    )
+
+    return piramide
 
 
 def calcular_metricas_economicas(df):
@@ -195,8 +204,6 @@ def calcular_metricas_geograficas(df):
         lambda cidade: coordenadas.get(cidade, {}).get("longitude")
     )
 
-    
-    
     cidades = cidades.dropna(subset=["latitude", "longitude"])
 
     return cidades

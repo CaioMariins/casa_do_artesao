@@ -9,19 +9,25 @@ def normalizar_dados(df):
         df["genero"] = (df["genero"].astype(str).str.strip().str.lower())
     
     mapa_genero = {
-        "mulher": "mulher",
-        "homem": "homem",
-        "pessoa trans": "pessoa trans",
-        "outros": "outros"
+        "mulher": "Mulher",
+        "homem": "Homem",
+        "pessoa trans": "Outros",
+        "outros": "Outros"
     }
 
-    df["genero"] = df["genero"].replace(mapa_genero)
+    df["genero"] = df["genero"].map(mapa_genero).fillna("Outros")
 
 
 
     # raça
     if "raca" in df.columns:
         df["raca"] = (df["raca"].astype(str).str.strip().str.lower())
+
+        df["raca"] = df["raca"].replace({
+        "": "Não informado",
+        "nan": "Não informado",
+        "None": "Não informado",
+        })
 
     mapa_raca = {
         "preto": "preto",
