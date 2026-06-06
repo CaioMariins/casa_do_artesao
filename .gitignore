@@ -12,3 +12,4 @@ secrets.py
 *.csv
 *.odt
 node_modules/
+FrontEnd/dist/
