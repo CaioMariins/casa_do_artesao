@@ -1,6 +1,7 @@
 """Dashboard Casa do Artesão - Análise de dados de artesãos."""
 
 import folium
+import pandas as pd
 import plotly.express as px
 import streamlit as st
 from services.cleaning import limpar_dados
@@ -705,6 +706,9 @@ st.divider()
 st.header("Evolução Temporal")
 
 metricas_temporais = calcular_metricas_temporais(df_filtrado)
+metricas_temporais["cadastro_por_mes"]["mes"] = pd.to_datetime(
+    metricas_temporais["cadastro_por_mes"]["mes"], format=("%Y-%m")
+)
 
 fig_temporal = px.line(
     metricas_temporais["cadastro_por_mes"],
@@ -731,6 +735,7 @@ fig_temporal.update_layout(
     showlegend=False,
     hovermode="x unified",
 )
+fig_temporal.update_xaxes(dtick="M10", tickformat="%b/%Y", tickangle=-45)
 
 st.plotly_chart(fig_temporal, use_container_width=True)
 st.divider()
