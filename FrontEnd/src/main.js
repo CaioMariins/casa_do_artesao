@@ -146,6 +146,23 @@ const abrirMapa = document.querySelector("#abrirMapa");
 const abrirMapaSecundario = document.querySelector("#abrirMapaSecundario");
 const fecharMapa = document.querySelector("#fecharMapa");
 
+const modalGaleria = document.querySelector("#modalGaleria");
+const abrirGaleria = document.querySelector("#abrirGaleria");
+const fecharGaleria = document.querySelector("#fecharGaleria");
+const gridGaleria = document.querySelector("#gridGaleria");
+
+const abrirGaleriaBtn = document.querySelector("#abrirGaleriaBtn");
+
+const fotosGaleria = [
+  { src: "img/feira-01.jpg", alt: "Banca com peças artesanais expostas em feira" },
+  { src: "img/feira-02.jpg", alt: "Detalhes de peças artesanais" },
+  { src: "img/feira-03.jpg", alt: "Produtos artesanais em exposição" },
+  { src: "img/feira-04.jpg", alt: "Peças artesanais coloridas" },
+  { src: "img/feira-05.jpg", alt: "Banca de artesanato em feira" },
+  { src: "img/feira-06.jpeg", alt: "Produção artesanal feita à mão" },
+  { src: "img/feira-07.jpeg", alt: "Produtos artesanais com identidade local" },
+];
+
 let mapaCriado = false;
 let map;
 
@@ -153,6 +170,7 @@ function abrirModalMapa() {
   if (!modalMapa) return;
 
   modalMapa.classList.remove("hidden");
+  bloquearScroll();
 
   setTimeout(() => {
     if (!mapaCriado) {
@@ -175,6 +193,7 @@ if (abrirMapaSecundario) {
 if (fecharMapa) {
   fecharMapa.addEventListener("click", () => {
     modalMapa.classList.add("hidden");
+    liberarScroll();
   });
 }
 
@@ -182,6 +201,75 @@ if (modalMapa) {
   modalMapa.addEventListener("click", (event) => {
     if (event.target === modalMapa) {
       modalMapa.classList.add("hidden");
+      liberarScroll();
+    }
+  });
+}
+
+function bloquearScroll() {
+  document.body.style.overflow = "hidden";
+}
+
+function liberarScroll() {
+  document.body.style.overflow = "";
+}
+
+function abrirModalGaleria() {
+  if (!modalGaleria) return;
+  modalGaleria.classList.remove("hidden");
+  bloquearScroll();
+}
+
+function fecharModalGaleria() {
+  if (!modalGaleria) return;
+  modalGaleria.classList.add("hidden");
+  liberarScroll();
+}
+
+if (gridGaleria) {
+  fotosGaleria.forEach((foto) => {
+    const card = document.createElement("article");
+    card.className = "overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm";
+    card.innerHTML = `
+      <img src="${foto.src}" alt="${foto.alt}" loading="lazy"
+        class="h-48 w-full object-cover transition duration-300 hover:scale-105" />
+      <div class="p-4">
+        <p class="text-sm font-semibold text-madeira-escura">${foto.alt}</p>
+      </div>
+    `;
+    gridGaleria.appendChild(card);
+  });
+}
+
+if (abrirGaleria) {
+  abrirGaleria.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleriaBtn) {
+  abrirGaleriaBtn.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleriaSecundaria) {
+  abrirGaleriaSecundaria.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleria) {
+  abrirGaleria.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      abrirModalGaleria();
+    }
+  });
+}
+
+if (fecharGaleria) {
+  fecharGaleria.addEventListener("click", fecharModalGaleria);
+}
+
+if (modalGaleria) {
+  modalGaleria.addEventListener("click", (event) => {
+    if (event.target === modalGaleria) {
+      fecharModalGaleria();
     }
   });
 }

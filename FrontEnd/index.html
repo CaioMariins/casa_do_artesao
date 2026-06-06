@@ -5,6 +5,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Casa do Artesão de Niterói</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="/src/accessibility.css" />
 </head>
 
@@ -15,35 +20,25 @@
     <span aria-hidden="true">Acessibilidade:</span>
 
     <!-- Tamanho de fonte -->
-    <button
-      class="btn-acessibilidade"
-      data-acao-fonte="diminuir"
-      aria-label="Diminuir tamanho do texto"
+    <button class="btn-acessibilidade" data-acao-fonte="diminuir" aria-label="Diminuir tamanho do texto"
       title="Diminuir texto">
       A−
     </button>
 
-    <button
-      class="btn-acessibilidade"
-      data-acao-fonte="aumentar"
-      aria-label="Aumentar tamanho do texto"
+    <button class="btn-acessibilidade" data-acao-fonte="aumentar" aria-label="Aumentar tamanho do texto"
       title="Aumentar texto">
       A+
     </button>
 
     <!-- Alto contraste -->
-    <button
-      id="btnContraste"
-      class="btn-acessibilidade"
-      aria-pressed="false"
-      title="Ativar alto contraste">
+    <button id="btnContraste" class="btn-acessibilidade" aria-pressed="false" title="Ativar alto contraste">
       ◑ Contraste
     </button>
   </div>
 
   <!-- Header -->
   <header class="fixed left-0 z-50 w-full border-b border-madeira/20 bg-base/95 shadow-sm backdrop-blur"
-    style="top: 2.4rem;"><!-- empurra o header para baixo da barra de acessibilidade -->
+    style="top: 2.4rem;">
 
     <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
       <a href="#inicio" class="flex items-center gap-3" aria-label="Ir para o início">
@@ -54,12 +49,8 @@
         </div>
 
         <div>
-          <h1 class="text-lg font-extrabold leading-tight text-madeira-escura">
-            Casa do Artesão
-          </h1>
-          <p class="text-xs font-bold uppercase tracking-[0.18em] text-verde-profundo">
-            Niterói
-          </p>
+          <h1 class="text-lg font-extrabold leading-tight text-madeira-escura">Casa do Artesão</h1>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-verde-profundo">Niterói</p>
         </div>
       </a>
 
@@ -76,17 +67,10 @@
 
       <div class="flex items-center gap-3">
         <a href="https://wa.me/5521966439991" target="_blank" rel="noopener noreferrer"
-          class="btn-destaque hidden rounded-full px-5 py-2 text-sm font-extrabold sm:inline-flex">
-          WhatsApp
-        </a>
+          class="btn-destaque hidden rounded-full px-5 py-2 text-sm font-extrabold sm:inline-flex">WhatsApp</a>
 
         <!-- Botão sanduíche — apenas mobile -->
-        <button
-          id="btnMenu"
-          type="button"
-          aria-expanded="false"
-          aria-controls="menuMobile"
-          aria-label="Abrir menu">
+        <button id="btnMenu" type="button" aria-expanded="false" aria-controls="menuMobile" aria-label="Abrir menu">
           <span class="linha" aria-hidden="true"></span>
           <span class="linha" aria-hidden="true"></span>
           <span class="linha" aria-hidden="true"></span>
@@ -95,35 +79,8 @@
     </div>
   </header>
 
-  <!-- Overlay do menu mobile -->
-  <div id="menuOverlay" class="hidden" aria-hidden="true"></div>
-
-  <!-- Menu mobile (drawer lateral) -->
-  <nav
-    id="menuMobile"
-    class="menu-fechado"
-    aria-label="Menu mobile"
-    aria-hidden="true">
-
-    <a href="#sobre">Sobre</a>
-    <a href="#galeria">Galeria</a>
-    <a href="#feiras">Feiras</a>
-    <a href="#mapa">Mapa</a>
-    <a href="#participar">Como participar</a>
-    <a href="#contato">Contato</a>
-
-    <a
-      href="https://wa.me/5521966439991"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="menu-mobile-whatsapp">
-      Chamar no WhatsApp
-    </a>
-  </nav>
-
   <!-- Pular para o conteúdo (skip link) -->
-  <a
-    href="#conteudo-principal"
+  <a href="#conteudo-principal"
     class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-20 focus:z-[999] focus:rounded-lg focus:bg-azul-casa focus:px-4 focus:py-2 focus:text-white focus:font-bold">
     Pular para o conteúdo principal
   </a>
@@ -161,24 +118,17 @@
         <div class="relative fade-up">
           <div class="card-artesanal rounded-[2rem] p-6">
             <div
-              class="flex h-80 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-creme via-base to-terracota/30 p-8 text-center">
-              <div>
-                <p class="mb-4 text-7xl" aria-hidden="true">🧶</p>
-
-                <h3 class="text-2xl font-extrabold text-madeira-escura">
-                  Feito à mão
-                </h3>
-
-                <p class="mt-2 text-texto-suave">
-                  Tradição, memória, afecto e criatividade em cada peça.
-                </p>
-              </div>
+              class="h-80 overflow-hidden rounded-[1.5rem] bg-base p-0 relative ring-1 ring-madeira/15 shadow-lg shadow-madeira/10">
+              <img id="abrirGaleria" src="img/image01.jpg.jpeg" alt="Imagem principal da galeria" role="button"
+                tabindex="0"
+                class="h-full w-full object-cover object-center rounded-[1.5rem] transition duration-500 hover:scale-105 cursor-pointer" />
             </div>
           </div>
-
-          <div class="absolute -bottom-6 -left-2 rounded-2xl border border-madeira/20 bg-base p-5 shadow-lg md:-left-6">
-            <p class="text-2xl font-extrabold text-madeira-escura">+1.200</p>
-            <p class="text-sm font-semibold text-texto-suave">artesãos cadastrados</p>
+          <div class="mt-4 flex justify-center">
+            <button id="abrirGaleriaBtn" type="button"
+              class="btn-secundario rounded-full px-6 py-3 text-sm font-extrabold">
+              Ver todas as fotos
+            </button>
           </div>
         </div>
       </div>
@@ -255,9 +205,15 @@
             </p>
           </div>
 
-          <a href="#feiras" class="btn-secundario inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
-            Ver feiras
-          </a>
+          <div class="flex flex-wrap items-center gap-4">
+            <a href="#feiras" class="btn-secundario inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Ver feiras
+            </a>
+            <button id="abrirGaleriaSecundaria" type="button"
+              class="btn-destaque inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Ver fotos
+            </button>
+          </div>
         </div>
 
         <div class="mt-12 grid gap-6 lg:grid-cols-3">
@@ -286,32 +242,36 @@
           <div class="grid gap-6">
             <article class="card-artesanal overflow-hidden rounded-[2rem]">
               <div class="h-52 overflow-hidden">
-                <img src="/img/feira-02.jpg" alt="Detalhes de peças artesanais"
+                <img src="/img/feira-02.jpg" alt="Detalhes de peças artesanais" loading="lazy" decoding="async"
                   class="h-full w-full object-cover transition duration-300 hover:scale-105" />
               </div>
               <div class="p-5">
                 <h3 class="text-xl font-extrabold text-madeira-escura">Peças criativas</h3>
-                <p class="mt-2 leading-relaxed text-texto-suave">Trabalhos que unem técnica, cuidado e originalidade.</p>
+                <p class="mt-2 leading-relaxed text-texto-suave">Trabalhos que unem técnica, cuidado e originalidade.
+                </p>
               </div>
             </article>
 
             <article class="card-artesanal overflow-hidden rounded-[2rem]">
               <div class="h-52 overflow-hidden">
-                <img src="img/feira-03.jpg" alt="Produtos artesanais em exposição"
+                <img src="img/feira-03.jpg" alt="Produtos artesanais em exposição" loading="lazy" decoding="async"
                   class="h-full w-full object-cover transition duration-300 hover:scale-105" />
               </div>
               <div class="p-5">
                 <h3 class="text-xl font-extrabold text-madeira-escura">Cultura local</h3>
-                <p class="mt-2 leading-relaxed text-texto-suave">Cada banca apresenta formas diferentes de criar e contar histórias.</p>
+                <p class="mt-2 leading-relaxed text-texto-suave">Cada banca apresenta formas diferentes de criar e
+                  contar histórias.</p>
               </div>
             </article>
           </div>
         </div>
 
         <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <article class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-04.jpg" alt="Peças artesanais coloridas" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+              <img src="img/feira-04.jpg" alt="Peças artesanais coloridas" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
               <p class="font-extrabold text-madeira-escura">Cores e detalhes</p>
@@ -319,9 +279,11 @@
             </div>
           </article>
 
-          <article class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-05.jpg" alt="Banca de artesanato em feira" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+              <img src="img/feira-05.jpg" alt="Banca de artesanato em feira" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
               <p class="font-extrabold text-madeira-escura">Feiras da cidade</p>
@@ -329,9 +291,11 @@
             </div>
           </article>
 
-          <article class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-06.jpeg" alt="Produção artesanal feita à mão" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+              <img src="img/feira-06.jpeg" alt="Produção artesanal feita à mão" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
               <p class="font-extrabold text-madeira-escura">Produção manual</p>
@@ -339,9 +303,11 @@
             </div>
           </article>
 
-          <article class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-07.jpeg" alt="Produtos artesanais com identidade local" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+              <img src="img/feira-07.jpeg" alt="Produtos artesanais com identidade local" loading="lazy"
+                decoding="async" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
               <p class="font-extrabold text-madeira-escura">Identidade cultural</p>
@@ -380,7 +346,8 @@
         <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Feiras</span>
-            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">Encontre uma feira perto de você</h2>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">Encontre uma feira perto de você
+            </h2>
             <p class="mt-4 max-w-2xl text-lg leading-relaxed text-texto-suave">
               Veja os locais, dias e horários das feiras de artesanato coordenadas pela Casa do Artesão.
             </p>
@@ -405,13 +372,15 @@
             O mapa ajuda moradores, visitantes e artesãos a encontrarem as feiras de forma simples. Cada ponto mostra
             o local, os dias e o horário de funcionamento.
           </p>
-          <button id="abrirMapaSecundario" type="button" class="btn-secundario mt-8 rounded-full px-6 py-3 font-extrabold">
-            Ver mapa interactivo
+          <button id="abrirMapaSecundario" type="button"
+            class="btn-secundario mt-8 rounded-full px-6 py-3 font-extrabold">
+            Ver mapa interativo
           </button>
         </div>
 
         <div class="card-artesanal rounded-[2rem] p-6">
-          <div class="flex h-72 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-creme via-base to-azul-casa/20 p-8 text-center">
+          <div
+            class="flex h-72 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-creme via-base to-azul-casa/20 p-8 text-center">
             <div>
               <p class="mb-4 text-7xl" aria-hidden="true">🗺️</p>
               <h3 class="text-2xl font-extrabold text-madeira-escura">Feiras espalhadas por Niterói</h3>
@@ -480,7 +449,8 @@
 
           <article class="card-artesanal rounded-[2rem] p-8">
             <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Gestão pública</span>
-            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura">Vinculada à Secretaria Municipal das Culturas</h2>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura">Vinculada à Secretaria Municipal das Culturas
+            </h2>
             <p class="mt-5 leading-relaxed text-texto-suave">
               A Casa do Artesão faz parte das acções da Prefeitura de Niterói e está vinculada à Secretaria Municipal
               das Culturas, actuando na valorização do artesanato e da economia criativa local.
@@ -493,7 +463,8 @@
     <!-- Contato rápido -->
     <section class="bg-papel px-4 py-20">
       <div class="mx-auto max-w-7xl">
-        <div class="rounded-[2rem] border border-madeira/20 bg-creme p-8 md:flex md:items-center md:justify-between md:gap-10">
+        <div
+          class="rounded-[2rem] border border-madeira/20 bg-creme p-8 md:flex md:items-center md:justify-between md:gap-10">
           <div>
             <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Contacto</span>
             <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-4xl">Fale com a Casa do Artesão</h2>
@@ -527,12 +498,14 @@
       </div>
     </div>
     <div class="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/50">
-      <p>Site informativo desenvolvido para divulgar as feiras, orientar novos artesãos e valorizar o artesanato de Niterói.</p>
+      <p>Site informativo desenvolvido para divulgar as feiras, orientar novos artesãos e valorizar o artesanato de
+        Niterói.</p>
     </div>
   </footer>
 
   <!-- Modal do mapa -->
-  <div id="modalMapa" class="fixed inset-0 z-[100] hidden bg-black/70 p-4" role="dialog" aria-modal="true" aria-label="Mapa das feiras">
+  <div id="modalMapa" class="fixed inset-0 z-[100] hidden bg-black/70 p-4" role="dialog" aria-modal="true"
+    aria-label="Mapa das feiras">
     <div class="relative mx-auto mt-10 max-w-6xl rounded-3xl bg-base p-4 shadow-2xl md:p-6">
       <button id="fecharMapa" type="button"
         class="btn-destaque absolute right-4 top-4 rounded-full px-4 py-2 text-sm font-extrabold"
@@ -544,19 +517,32 @@
     </div>
   </div>
 
+  <!-- Modal da galeria -->
+  <div id="modalGaleria" class="fixed inset-0 z-[100] hidden bg-black/70 p-4" role="dialog" aria-modal="true"
+    aria-label="Galeria de fotos">
+    <div class="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-3xl bg-base p-4 shadow-2xl md:p-6">
+      <button id="fecharGaleria" type="button"
+        class="btn-destaque absolute right-4 top-4 rounded-full px-4 py-2 text-sm font-extrabold"
+        aria-label="Fechar galeria">
+        Fechar
+      </button>
+      <h2 class="mb-4 pr-24 text-2xl font-extrabold text-madeira-escura">Galeria completa</h2>
+      <p class="mb-6 text-texto-suave">Explore todas as imagens das feiras e artesãos de Niterói.</p>
+      <div class="max-h-[75vh] overflow-y-auto pr-2">
+        <div id="gridGaleria" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Botão voltar ao topo -->
-  <button
-    id="btnTopo"
-    type="button"
-    aria-label="Voltar ao topo da página"
-    title="Voltar ao topo">
+  <button id="btnTopo" type="button" aria-label="Voltar ao topo da página" title="Voltar ao topo">
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <polyline points="18 15 12 9 6 15"></polyline>
     </svg>
   </button>
 
   <!-- Scripts -->
-  <script src="/src/accessibility.js"></script>
+  <script src="/src/accessibility.js" defer></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 
