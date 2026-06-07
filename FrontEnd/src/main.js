@@ -1,19 +1,12 @@
-import "./style.css";
+// CSS importado no HTML para evitar FOUC (Flash of Unstyled Content)
+// Leaflet será carregado sob demanda quando o mapa for aberto
 
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-const defaultIcon = L.icon({
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-});
-
-L.Marker.prototype.options.icon = defaultIcon;
+// Função para lazy load do Leaflet
+async function loadLeaflet() {
+  const L = (await import("leaflet")).default;
+  await import("leaflet/dist/leaflet.css");
+  return L;
+}
 
 const feiras = [
   {
@@ -146,6 +139,52 @@ const abrirMapa = document.querySelector("#abrirMapa");
 const abrirMapaSecundario = document.querySelector("#abrirMapaSecundario");
 const fecharMapa = document.querySelector("#fecharMapa");
 
+const modalGaleria = document.querySelector("#modalGaleria");
+const abrirGaleria = document.querySelector("#abrirGaleria");
+const fecharGaleria = document.querySelector("#fecharGaleria");
+const gridGaleria = document.querySelector("#gridGaleria");
+
+const abrirGaleriaBtn = document.querySelector("#abrirGaleriaBtn");
+
+const fotosGaleria = [
+  { src: "/img/feira-01.jpg", alt: "Banca com peças artesanais expostas em feira" },
+  { src: "/img/feira-02.webp", alt: "Detalhes de peças artesanais" },
+  { src: "/img/feira-03.webp", alt: "Produtos artesanais em exposição" },
+  { src: "/img/feira-04.webp", alt: "Peças artesanais coloridas" },
+  { src: "/img/feira-05.webp", alt: "Banca de artesanato em feira" },
+  { src: "/img/feira-06.webp", alt: "Produção artesanal feita à mão" },
+  { src: "/img/feira-07.webp", alt: "Produtos artesanais com identidade local" },
+  { src: "/img/IMG_9372.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9373.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9375.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9377.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9380.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9381.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9382.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9383.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9389.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9390.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9392.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9393.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9395.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9396.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9398.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9401.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9402.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9403.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9404.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9408.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9409.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9411.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9416.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9419.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9421.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9424.jpg", alt: "Imagem da galeria de evento artesanal" },
+  { src: "/img/IMG_9426.jpg", alt: "Imagem da galeria de evento artesanal" },
+];
+
+const fotosGaleriaPrincipal = fotosGaleria.slice(0, 7);
+
 let mapaCriado = false;
 let map;
 
@@ -153,15 +192,14 @@ function abrirModalMapa() {
   if (!modalMapa) return;
 
   modalMapa.classList.remove("hidden");
+  bloquearScroll();
 
-  setTimeout(() => {
-    if (!mapaCriado) {
-      criarMapa();
-      mapaCriado = true;
-    } else {
-      map.invalidateSize();
-    }
-  }, 200);
+  if (!mapaCriado) {
+    criarMapa();
+    mapaCriado = true;
+  } else {
+    map.invalidateSize();
+  }
 }
 
 if (abrirMapa) {
@@ -175,6 +213,7 @@ if (abrirMapaSecundario) {
 if (fecharMapa) {
   fecharMapa.addEventListener("click", () => {
     modalMapa.classList.add("hidden");
+    liberarScroll();
   });
 }
 
@@ -182,16 +221,160 @@ if (modalMapa) {
   modalMapa.addEventListener("click", (event) => {
     if (event.target === modalMapa) {
       modalMapa.classList.add("hidden");
+      liberarScroll();
     }
   });
 }
 
-function criarMapa() {
+function bloquearScroll() {
+  document.body.style.overflow = "hidden";
+}
+
+function liberarScroll() {
+  document.body.style.overflow = "";
+}
+
+function abrirModalGaleria() {
+  if (!modalGaleria) return;
+  modalGaleria.classList.remove("hidden");
+  bloquearScroll();
+}
+
+function fecharModalGaleria() {
+  if (!modalGaleria) return;
+  modalGaleria.classList.add("hidden");
+  liberarScroll();
+}
+
+if (gridGaleria) {
+  // Variável para rastrear foto atual no modal
+  let fotoAtualIndex = 0;
+
+  function atualizarGaleria(index) {
+    fotoAtualIndex = (index + fotosGaleria.length) % fotosGaleria.length;
+    document.getElementById("fotoGrande").src = fotosGaleria[fotoAtualIndex].src;
+    document.getElementById("fotoAtual").textContent = fotoAtualIndex + 1;
+
+    // Atualizar thumbnails ativas
+    document.querySelectorAll("#thumbnails button").forEach((thumb, i) => {
+      thumb.classList.toggle("ring-2", i === fotoAtualIndex);
+      thumb.classList.toggle("ring-terracota", i === fotoAtualIndex);
+    });
+  }
+
+  fotosGaleriaPrincipal.forEach((foto, index) => {
+    const card = document.createElement("article");
+    card.className = "overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm";
+    card.innerHTML = `
+      <img src="${foto.src}" alt="${foto.alt}" loading="lazy"
+        class="h-48 w-full object-cover transition duration-300 hover:scale-105 cursor-pointer" />
+      <div class="p-4">
+        <p class="text-sm font-semibold text-madeira-escura">${foto.alt}</p>
+      </div>
+    `;
+    card.addEventListener("click", () => {
+      abrirModalGaleria();
+      atualizarGaleria(index);
+    });
+    gridGaleria.appendChild(card);
+  });
+
+  // Criar thumbnails no modal
+  const thumbnails = document.getElementById("thumbnails");
+  fotosGaleria.forEach((foto, index) => {
+    const thumb = document.createElement("button");
+    thumb.type = "button";
+    thumb.className = "w-16 h-16 rounded-lg overflow-hidden border-2 border-white/30 hover:border-white/60 transition";
+    if (index === 0) thumb.classList.add("ring-2", "ring-terracota");
+    thumb.innerHTML = `<img src="${foto.src}" alt="Miniatura ${index + 1}" class="w-full h-full object-cover">`;
+    thumb.addEventListener("click", () => atualizarGaleria(index));
+    thumbnails.appendChild(thumb);
+  });
+
+  document.getElementById("totalFotos").textContent = fotosGaleria.length;
+  atualizarGaleria(0);
+
+  // Navegação com botões
+  const fotoPrev = document.getElementById("fotoPrev");
+  const fotoNext = document.getElementById("fotoNext");
+
+  if (fotoPrev) {
+    fotoPrev.addEventListener("click", () => atualizarGaleria(fotoAtualIndex - 1));
+  }
+
+  if (fotoNext) {
+    fotoNext.addEventListener("click", () => atualizarGaleria(fotoAtualIndex + 1));
+  }
+
+  // Navegar com teclado
+  document.addEventListener("keydown", (e) => {
+    if (!modalGaleria.classList.contains("hidden")) {
+      if (e.key === "ArrowLeft") atualizarGaleria(fotoAtualIndex - 1);
+      if (e.key === "ArrowRight") atualizarGaleria(fotoAtualIndex + 1);
+    }
+  });
+}
+
+if (abrirGaleria) {
+  abrirGaleria.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleriaBtn) {
+  abrirGaleriaBtn.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleriaSecundaria) {
+  abrirGaleriaSecundaria.addEventListener("click", abrirModalGaleria);
+}
+
+if (abrirGaleria) {
+  abrirGaleria.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      abrirModalGaleria();
+    }
+  });
+}
+
+if (fecharGaleria) {
+  fecharGaleria.addEventListener("click", fecharModalGaleria);
+}
+
+if (modalGaleria) {
+  modalGaleria.addEventListener("click", (event) => {
+    if (event.target === modalGaleria) {
+      fecharModalGaleria();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!modalGaleria.classList.contains("hidden") && event.key === "Escape") {
+      fecharModalGaleria();
+    }
+  });
+}
+
+async function criarMapa() {
+  const L = await loadLeaflet();
+
   map = L.map("map").setView([-22.9068, -43.1109], 12);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap",
   }).addTo(map);
+
+  // Configurar ícone padrão com lazy load
+  const markerIcon = await import("leaflet/dist/images/marker-icon.png");
+  const markerShadow = await import("leaflet/dist/images/marker-shadow.png");
+
+  const defaultIcon = L.icon({
+    iconUrl: markerIcon.default,
+    shadowUrl: markerShadow.default,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+
+  L.Marker.prototype.options.icon = defaultIcon;
 
   feiras.forEach((feira) => {
     L.marker(feira.coordenadas).addTo(map).bindPopup(`
