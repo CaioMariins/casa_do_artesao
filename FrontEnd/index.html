@@ -11,6 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link rel="stylesheet" href="/src/accessibility.css" />
+  <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body class="bg-base text-texto">
@@ -44,7 +45,7 @@
       <a href="#inicio" class="flex items-center gap-3" aria-label="Ir para o início">
         <div
           class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-terracota bg-white p-1 shadow-sm">
-          <img src="img/logo1.jpg" alt="Logo da Casa do Artesão de Niterói"
+          <img src="img/logo1.png" alt="Logo da Casa do Artesão de Niterói"
             class="h-full w-full rounded-full object-contain" />
         </div>
 
@@ -119,8 +120,7 @@
           <div class="card-artesanal rounded-[2rem] p-6">
             <div
               class="h-56 sm:h-72 md:h-80 lg:h-96 overflow-hidden rounded-[1.5rem] bg-base p-0 relative ring-1 ring-madeira/15 shadow-lg shadow-madeira/10">
-              <img id="abrirGaleria" src="img/image01.jpg.jpeg" alt="Imagem principal da galeria" role="button"
-                tabindex="0"
+              <img id="abrirGaleria" src="img/image01.webp" alt="Imagem principal da galeria" role="button" tabindex="0"
                 class="h-full w-full object-contain md:object-cover object-center rounded-[1.5rem] transition duration-500 hover:scale-105 cursor-pointer" />
             </div>
           </div>
@@ -217,6 +217,10 @@
         </div>
 
         <div class="mt-12 grid gap-6 lg:grid-cols-3">
+          <!-- Galeria para abrir em modal grande -->
+          <div id="gridGaleria" class="lg:col-span-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+          <!-- Galeria descritiva original -->
           <article class="card-artesanal overflow-hidden rounded-[2rem] lg:col-span-2">
             <div class="relative h-[520px] overflow-hidden bg-madeira-escura md:h-[560px] lg:h-[620px]">
               <img src="/img/feira-01.jpg" alt="Banca com peças artesanais expostas em feira"
@@ -242,7 +246,7 @@
           <div class="grid gap-6">
             <article class="card-artesanal overflow-hidden rounded-[2rem]">
               <div class="h-52 overflow-hidden">
-                <img src="/img/feira-02.jpg" alt="Detalhes de peças artesanais" loading="lazy" decoding="async"
+                <img src="/img/feira-02.webp" alt="Detalhes de peças artesanais" loading="lazy" decoding="async"
                   class="h-full w-full object-cover transition duration-300 hover:scale-105" />
               </div>
               <div class="p-5">
@@ -254,7 +258,7 @@
 
             <article class="card-artesanal overflow-hidden rounded-[2rem]">
               <div class="h-52 overflow-hidden">
-                <img src="img/feira-03.jpg" alt="Produtos artesanais em exposição" loading="lazy" decoding="async"
+                <img src="img/feira-03.webp" alt="Produtos artesanais em exposição" loading="lazy" decoding="async"
                   class="h-full w-full object-cover transition duration-300 hover:scale-105" />
               </div>
               <div class="p-5">
@@ -270,7 +274,7 @@
           <article
             class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-04.jpg" alt="Peças artesanais coloridas" loading="lazy" decoding="async"
+              <img src="img/feira-04.webp" alt="Peças artesanais coloridas" loading="lazy" decoding="async"
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
@@ -282,7 +286,7 @@
           <article
             class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-05.jpg" alt="Banca de artesanato em feira" loading="lazy" decoding="async"
+              <img src="img/feira-05.webp" alt="Banca de artesanato em feira" loading="lazy" decoding="async"
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
@@ -294,7 +298,7 @@
           <article
             class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-06.jpeg" alt="Produção artesanal feita à mão" loading="lazy" decoding="async"
+              <img src="img/feira-06.webp" alt="Produção artesanal feita à mão" loading="lazy" decoding="async"
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
@@ -306,7 +310,7 @@
           <article
             class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
             <div class="h-56 overflow-hidden">
-              <img src="img/feira-07.jpeg" alt="Produtos artesanais com identidade local" loading="lazy"
+              <img src="img/feira-07.webp" alt="Produtos artesanais com identidade local" loading="lazy"
                 decoding="async" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
             </div>
             <div class="p-4">
@@ -518,18 +522,34 @@
   </div>
 
   <!-- Modal da galeria -->
-  <div id="modalGaleria" class="fixed inset-0 z-[100] hidden bg-black/70 p-4" role="dialog" aria-modal="true"
-    aria-label="Galeria de fotos">
-    <div class="relative mx-auto mt-10 max-w-6xl overflow-hidden rounded-3xl bg-base p-4 shadow-2xl md:p-6">
-      <button id="fecharGaleria" type="button"
-        class="btn-destaque absolute right-4 top-4 rounded-full px-4 py-2 text-sm font-extrabold"
-        aria-label="Fechar galeria">
-        Fechar
-      </button>
-      <h2 class="mb-4 pr-24 text-2xl font-extrabold text-madeira-escura">Galeria completa</h2>
-      <p class="mb-6 text-texto-suave">Explore todas as imagens das feiras e artesãos de Niterói.</p>
-      <div class="max-h-[75vh] overflow-y-auto pr-2">
-        <div id="gridGaleria" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <div id="modalGaleria" class="fixed inset-0 z-[100] hidden bg-black/95 flex items-center justify-center p-4"
+    role="dialog" aria-modal="true" aria-label="Galeria de fotos">
+    <div class="relative w-full max-w-5xl">
+      <!-- Container da foto grande -->
+      <div class="relative bg-black rounded-2xl overflow-hidden">
+        <button id="fecharGaleria" type="button"
+          class="absolute top-8 right-4 z-50 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 text-2xl font-bold transition"
+          aria-label="Fechar galeria">
+          ✕
+        </button>
+        <img id="fotoGrande" src="" alt="Foto em destaque" class="w-full h-auto max-h-[70vh] object-contain">
+        <!-- Navegação -->
+        <button id="fotoPrev" type="button"
+          class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition"
+          aria-label="Foto anterior">
+          ❮
+        </button>
+        <button id="fotoNext" type="button"
+          class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition"
+          aria-label="Próxima foto">
+          ❯
+        </button>
+      </div>
+
+      <!-- Contador e thumbnails -->
+      <div class="mt-6 flex flex-col items-center">
+        <p class="text-white text-sm mb-4"><span id="fotoAtual">1</span> / <span id="totalFotos">7</span></p>
+        <div class="flex gap-3 justify-center flex-wrap" id="thumbnails"></div>
       </div>
     </div>
   </div>
@@ -542,7 +562,7 @@
   </button>
 
   <!-- Scripts -->
-  <script src="/src/accessibility.js" defer></script>
+  <script src="/src/accessibility.js" defer type="module"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 

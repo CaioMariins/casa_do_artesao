@@ -13,3 +13,4 @@ secrets.py
 *.odt
 node_modules/
 FrontEnd/dist/
+dist/
