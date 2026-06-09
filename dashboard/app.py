@@ -4,6 +4,7 @@ import folium
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from folium.plugins import HeatMap
 from services.cleaning import limpar_dados
 from services.features import criar_colunas_derivadas
 from services.loader import carregar_dados
@@ -24,6 +25,8 @@ from streamlit_folium import st_folium
 # ============================================================================
 # CONFIGURAÇÃO DE TEMAS E ESTILOS
 # ============================================================================
+COR_FONTE = "#000000"
+
 CORES_GENERO = {
     "Homem": "#4E79A7",
     "Mulher": "#E15759",
@@ -51,6 +54,20 @@ CORES_RACA = {
     "Não informado": "#BAB0AC",
 }
 TEMPLATE_PADRAO = "plotly_white"
+
+st.markdown(
+    """
+<style>
+div[data-testid="stMetric"] {
+    background: #f3f1e8;
+    border: 1px solid #DDE3EA;
+    border-radius: 12px;
+    padding: 15px;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
 
 # ============================================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -185,12 +202,20 @@ fig_genero.update_traces(
 )
 fig_genero.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=12),
+    font=dict(family="Arial, sans-serif", size=12, color=COR_FONTE),
     margin=dict(l=10, r=10, t=40, b=10),
     showlegend=False,
     height=400,
 )
-fig_genero.update_xaxes(range=[0, maximo * 1.25])
+fig_genero.update_xaxes(
+    range=[0, maximo * 1.25],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_genero.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
+
 
 metricas_demo["raca"].columns = ["raca", "quantidade"]
 metricas_demo["raca"] = metricas_demo["raca"].sort_values("quantidade", ascending=True)
@@ -215,13 +240,13 @@ fig_raca = px.bar(
 )
 fig_raca.update_traces(
     text=metricas_demo["raca"]["percentual_texto"],
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
     marker_color=[CORES_RACA[g] for g in metricas_demo["raca"]["raca"]],
 )
 fig_raca.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
     height=350,
@@ -229,7 +254,16 @@ fig_raca.update_layout(
     yaxis_title="",
 )
 
-fig_raca.update_xaxes(range=[0, 100], ticksuffix="%")
+fig_raca.update_xaxes(
+    range=[0, 100],
+    ticksuffix="%",
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_raca.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
+
 
 metricas_demo["faixa_etaria"].columns = ["faixa_etaria", "quantidade"]
 
@@ -264,7 +298,7 @@ fig_piramide.update_traces(
 )
 fig_piramide.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
     height=380,
@@ -273,7 +307,14 @@ fig_piramide.update_layout(
 )
 
 fig_piramide.update_xaxes(
-    tickvals=[-50, -25, 0, 25, 50], ticktext=["50", "25", "0", "25", "50"]
+    tickvals=[-50, -25, 0, 25, 50],
+    ticktext=["50", "25", "0", "25", "50"],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+
+fig_piramide.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
 )
 
 # Adicionar anotações indicando Homem e Mulher
@@ -342,17 +383,25 @@ fig_renda = px.bar(
 fig_renda.update_traces(
     hovertemplate="<b>%{x}%</b><br>Quantidade: %{y}<extra></extra>",
     marker_color=COR_PADRAO,
+    textposition="outside",
 )
 fig_renda.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
     height=350,
     xaxis_title="Percentual de Renda",
     yaxis_title="Quantidade",
 )
-fig_renda.update_yaxes(range=[0, maximo * 1.15])
+fig_renda.update_xaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
+fig_renda.update_yaxes(
+    range=[0, maximo * 1.15],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
 
 
 metricas_economicas["outra_renda"].columns = ["outra_renda", "quantidade"]
@@ -378,7 +427,7 @@ fig_outra_renda = px.bar(
 )
 fig_outra_renda.update_traces(
     text=metricas_economicas["outra_renda"]["porcentagem"].apply(lambda x: f"{x}%"),
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["outra_renda"]["porcentagem"],
     marker_color=[
@@ -387,14 +436,21 @@ fig_outra_renda.update_traces(
 )
 fig_outra_renda.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=120, r=20, t=40, b=10),
     showlegend=False,
     height=350,
     xaxis_title="Quantidade",
     yaxis_title="",
 )
-fig_outra_renda.update_xaxes(range=[0, maximo * 1.15])
+fig_outra_renda.update_xaxes(
+    range=[0, maximo * 1.15],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_outra_renda.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 metricas_economicas["aposentado"].columns = ["aposentado", "quantidade"]
 metricas_economicas["aposentado"] = metricas_economicas["aposentado"].sort_values(
@@ -420,7 +476,7 @@ fig_aposentado = px.bar(
 )
 fig_aposentado.update_traces(
     text=metricas_economicas["aposentado"]["porcentagem"].apply(lambda x: f"{x}%"),
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["aposentado"]["porcentagem"],
     marker_color=[
@@ -429,14 +485,21 @@ fig_aposentado.update_traces(
 )
 fig_aposentado.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=100, r=20, t=40, b=10),
     showlegend=False,
     height=350,
     xaxis_title="Quantidade",
     yaxis_title="",
 )
-fig_aposentado.update_xaxes(range=[0, maximo * 1.15])
+fig_aposentado.update_xaxes(
+    range=[0, maximo * 1.15],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_aposentado.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 metricas_economicas["pensionista"].columns = ["pensionista", "quantidade"]
 metricas_economicas["pensionista"] = metricas_economicas["pensionista"].sort_values(
@@ -462,7 +525,7 @@ fig_pensionista = px.bar(
 )
 fig_pensionista.update_traces(
     text=metricas_economicas["pensionista"]["porcentagem"].apply(lambda x: f"{x}%"),
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["pensionista"]["porcentagem"],
     marker_color=[
@@ -471,14 +534,21 @@ fig_pensionista.update_traces(
 )
 fig_pensionista.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=100, r=20, t=40, b=10),
     showlegend=False,
     height=350,
     xaxis_title="Quantidade",
     yaxis_title="",
 )
-fig_pensionista.update_xaxes(range=[0, maximo * 1.15])
+fig_pensionista.update_xaxes(
+    range=[0, maximo * 1.15],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_pensionista.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 
 col1, espaco, col2 = st.columns([1, 0.1, 1])
@@ -525,14 +595,21 @@ fig_feira.update_traces(
 )
 fig_feira.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=100, r=20, t=40, b=10),
     showlegend=False,
     height=380,
     xaxis_title="Quantidade",
     yaxis_title="",
 )
-fig_feira.update_xaxes(range=[0, maximo * 1.35])
+fig_feira.update_xaxes(
+    range=[0, maximo * 1.35],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_feira.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 
 fig_genero_feira = px.bar(
@@ -549,14 +626,21 @@ fig_genero_feira.update_traces(
 )
 fig_genero_feira.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     height=380,
     xaxis_title="Feira",
     yaxis_title="Quantidade",
     legend=dict(title="Gênero", orientation="v", x=1.02, y=1),
 )
-fig_genero_feira.update_yaxes(range=[0, maximo * 0.90])
+fig_genero_feira.update_xaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
+fig_genero_feira.update_yaxes(
+    range=[0, maximo * 0.90],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
 
 col1, espaco, col2 = st.columns([1, 0.1, 1])
 
@@ -595,20 +679,28 @@ fig_tecnicas = px.bar(
 )
 fig_tecnicas.update_traces(
     text=metricas_atuacao["tecnicas"]["porcentagem"].apply(lambda x: f"{x}%"),
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
     marker_color=COR_PADRAO,
 )
 fig_tecnicas.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=80, r=40, t=40, b=10),
     showlegend=False,
     height=400,
     xaxis_title="Percentual",
     yaxis_title="",
 )
-fig_tecnicas.update_xaxes(range=[0, 100], ticksuffix="%")
+fig_tecnicas.update_xaxes(
+    range=[0, 100],
+    ticksuffix="%",
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_tecnicas.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 metricas_atuacao["produtos"].columns = ["produto", "quantidade"]
 metricas_atuacao["produtos"] = metricas_atuacao["produtos"].sort_values(
@@ -631,20 +723,28 @@ fig_produtos = px.bar(
 )
 fig_produtos.update_traces(
     text=metricas_atuacao["produtos"]["porcentagem"].apply(lambda x: f"{x}%"),
-    textposition="auto",
+    textposition="outside",
     hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
     marker_color=COR_PADRAO,
 )
 fig_produtos.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=80, r=40, t=40, b=10),
     showlegend=False,
     height=400,
     xaxis_title="Percentual",
     yaxis_title="",
 )
-fig_produtos.update_xaxes(range=[0, 100], ticksuffix="%")
+fig_produtos.update_xaxes(
+    range=[0, 100],
+    ticksuffix="%",
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_produtos.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 col3, espaco, col4 = st.columns([1, 0.1, 1])
 
@@ -677,14 +777,21 @@ fig_mei.update_traces(
 )
 fig_mei.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     height=400,
     xaxis_title="Feira",
     yaxis_title="Quantidade",
     legend=dict(title="MEI", orientation="h", x=0.5, y=1.1),
 )
-fig_mei.update_yaxes(range=[0, maximo * 1.15])
+fig_mei.update_xaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
+fig_mei.update_yaxes(
+    range=[0, maximo * 1.15],
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
 
 col1, col2 = st.columns(2)
 
@@ -727,7 +834,7 @@ fig_temporal.update_traces(
 )
 fig_temporal.update_layout(
     template=TEMPLATE_PADRAO,
-    font=dict(family="Arial, sans-serif", size=11),
+    font=dict(family="Arial, sans-serif", size=11, color=COR_FONTE),
     margin=dict(l=50, r=20, t=40, b=30),
     height=400,
     xaxis_title="Período",
@@ -735,7 +842,16 @@ fig_temporal.update_layout(
     showlegend=False,
     hovermode="x unified",
 )
-fig_temporal.update_xaxes(dtick="M10", tickformat="%b/%Y", tickangle=-45)
+fig_temporal.update_xaxes(
+    dtick="M9",
+    tickformat="%b/%Y",
+    tickangle=-45,
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
+)
+fig_temporal.update_yaxes(
+    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+)
 
 st.plotly_chart(fig_temporal, use_container_width=True)
 st.divider()
@@ -747,10 +863,17 @@ st.header("Distribuição Geográfica")
 
 metricas_geo = calcular_metricas_geograficas(df)
 
+dados_heatmap = metricas_geo[["latitude", "longitude", "quantidade"]].values.tolist()
+
 mapa = folium.Map(location=[-22.90, -43.20], zoom_start=7, tiles="OpenStreetMap")
 
+fg_marcadores = folium.FeatureGroup(
+    name="Marcadores",
+    show=True
+)
+
 for _, row in metricas_geo.iterrows():
-    folium.CircleMarker(
+    folium.Marker(
         location=[row["latitude"], row["longitude"]],
         radius=row["quantidade"],
         popup=(
@@ -761,6 +884,20 @@ for _, row in metricas_geo.iterrows():
         ),
         tooltip=row["cidade"],
         fill=True,
-    ).add_to(mapa)
+    ).add_to(fg_marcadores)
+
+fg_marcadores.add_to(mapa)
+
+fg_calor = folium.FeatureGroup(name="Mapa de Calor", show=False)
+HeatMap(
+    dados_heatmap,
+    radius=25,
+    blur=15,
+    max_zoom=10,
+).add_to(fg_calor)
+
+fg_calor.add_to(mapa)
+
+folium.LayerControl(collapsed=False).add_to(mapa)
 
 st_folium(mapa, width="stretch", height=500, returned_objects=[])
