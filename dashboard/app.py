@@ -193,10 +193,10 @@ fig_genero = px.bar(
 
 fig_genero.update_traces(
     text=metricas_demo["genero"].apply(
-        lambda row: f"{row['quantidade']} ({row['porcentagem']}%)", axis=1
+        lambda row: f"{row['porcentagem']}%", axis=1
     ),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    hovertemplate="<b><br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_demo["genero"]["porcentagem"],
     marker_color=[CORES_GENERO[g] for g in metricas_demo["genero"]["genero"]],
 )
@@ -241,7 +241,7 @@ fig_raca = px.bar(
 fig_raca.update_traces(
     text=metricas_demo["raca"]["percentual_texto"],
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{x:.1f}%<extra></extra>",
     marker_color=[CORES_RACA[g] for g in metricas_demo["raca"]["raca"]],
 )
 fig_raca.update_layout(
@@ -302,8 +302,8 @@ fig_piramide.update_layout(
     margin=dict(l=50, r=20, t=40, b=30),
     showlegend=False,
     height=380,
-    xaxis_title="Faixa Etária",
-    yaxis_title="Quantidade",
+    xaxis_title="Quantidade",
+    yaxis_title="Faixa Etária",
 )
 
 fig_piramide.update_xaxes(
@@ -314,6 +314,7 @@ fig_piramide.update_xaxes(
 )
 
 fig_piramide.update_yaxes(
+    autorange="reversed",
     tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
 )
 
@@ -381,7 +382,7 @@ fig_renda = px.bar(
     title="Participação do Artesanato na Renda",
 )
 fig_renda.update_traces(
-    hovertemplate="<b>%{x}%</b><br>Quantidade: %{y}<extra></extra>",
+    hovertemplate="<b>Percentual: %{x}</b><br><extra></extra>",
     marker_color=COR_PADRAO,
     textposition="outside",
 )
@@ -428,7 +429,7 @@ fig_outra_renda = px.bar(
 fig_outra_renda.update_traces(
     text=metricas_economicas["outra_renda"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["outra_renda"]["porcentagem"],
     marker_color=[
         CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
@@ -477,7 +478,7 @@ fig_aposentado = px.bar(
 fig_aposentado.update_traces(
     text=metricas_economicas["aposentado"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["aposentado"]["porcentagem"],
     marker_color=[
         CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
@@ -526,7 +527,7 @@ fig_pensionista = px.bar(
 fig_pensionista.update_traces(
     text=metricas_economicas["pensionista"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Quantidade: %{x}<br>Percentual: %{customdata}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_economicas["pensionista"]["porcentagem"],
     marker_color=[
         CORES_SIM_NAO[g] for g in metricas_economicas["outra_renda"]["outra_renda"]
@@ -580,6 +581,14 @@ metricas_territoriais["feira"] = metricas_territoriais["feira"].sort_values(
     "quantidade", ascending=True
 )
 
+metricas_territoriais["genero_por_feira"]["percentual"] = (
+    metricas_territoriais["genero_por_feira"]["quantidade"]
+    / metricas_territoriais["genero_por_feira"]
+        .groupby("feira")["quantidade"]
+        .transform("sum")  
+    * 100
+).round(1)
+
 maximo = metricas_territoriais["feira"]["quantidade"].max()
 
 fig_feira = px.bar(
@@ -615,14 +624,20 @@ fig_feira.update_yaxes(
 fig_genero_feira = px.bar(
     metricas_territoriais["genero_por_feira"],
     x="feira",
-    y="quantidade",
+    y="percentual",
     color="genero",
     barmode="group",
+    custom_data=["percentual"],
     title="Distribuição de Gênero por Feira",
     color_discrete_map=CORES_GENERO,
 )
 fig_genero_feira.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>",
+    texttemplate="%{customdata[0]}%",
+    textposition="outside",
+    hovertemplate=
+    "<b>%{x}</b><br>"
+    "%{fullData.name}: %{y}<br>"
+    "<extra></extra>",
 )
 fig_genero_feira.update_layout(
     template=TEMPLATE_PADRAO,
@@ -630,16 +645,17 @@ fig_genero_feira.update_layout(
     margin=dict(l=50, r=20, t=40, b=30),
     height=380,
     xaxis_title="Feira",
-    yaxis_title="Quantidade",
+    yaxis_title="percentual",
     legend=dict(title="Gênero", orientation="v", x=1.02, y=1),
 )
 fig_genero_feira.update_xaxes(
     tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
 )
 fig_genero_feira.update_yaxes(
-    range=[0, maximo * 0.90],
+    range=[0, 100],
     tickfont=dict(color=COR_FONTE, size=11),
     title_font=dict(color=COR_FONTE, size=13),
+    ticksuffix="%"
 )
 
 col1, espaco, col2 = st.columns([1, 0.1, 1])
@@ -680,7 +696,7 @@ fig_tecnicas = px.bar(
 fig_tecnicas.update_traces(
     text=metricas_atuacao["tecnicas"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{x:.1f}%<extra></extra>",
     marker_color=COR_PADRAO,
 )
 fig_tecnicas.update_layout(
@@ -724,7 +740,7 @@ fig_produtos = px.bar(
 fig_produtos.update_traces(
     text=metricas_atuacao["produtos"]["porcentagem"].apply(lambda x: f"{x}%"),
     textposition="outside",
-    hovertemplate="<b>%{y}</b><br>Porcentagem: %{x:.1f}%<extra></extra>",
+    hovertemplate="<b>%{y}</b><br>Percentual: %{x:.1f}%<extra></extra>",
     marker_color=COR_PADRAO,
 )
 fig_produtos.update_layout(
@@ -763,17 +779,27 @@ metricas_formalizacao = calcular_metricas_formalizacao(df_filtrado)
 
 maximo = metricas_formalizacao["mei_por_feira"]["quantidade"].max()
 
+# porcentagem
+metricas_formalizacao["mei_por_feira"]["percentual"] = (
+    metricas_formalizacao["mei_por_feira"]["quantidade"]
+    / metricas_formalizacao["mei_por_feira"]
+        .groupby("feira")["quantidade"]
+        .transform("sum")    
+    * 100
+).round(1)
+
 fig_mei = px.bar(
     metricas_formalizacao["mei_por_feira"],
     x="feira",
-    y="quantidade",
+    y="percentual",
     color="mei",
     barmode="group",
+    custom_data=["quantidade"],
     title="MEI por Feira",
     color_discrete_map=CORES_SIM_NAO,
 )
 fig_mei.update_traces(
-    hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y}<extra></extra>",
+    hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y:.1f}%<extra></extra>",
 )
 fig_mei.update_layout(
     template=TEMPLATE_PADRAO,
@@ -788,7 +814,9 @@ fig_mei.update_xaxes(
     tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
 )
 fig_mei.update_yaxes(
-    range=[0, maximo * 1.15],
+    range=[0, 100],
+    ticksuffix="%",
+    title="Percentual",
     tickfont=dict(color=COR_FONTE, size=11),
     title_font=dict(color=COR_FONTE, size=13),
 )
@@ -865,7 +893,8 @@ metricas_geo = calcular_metricas_geograficas(df)
 
 dados_heatmap = metricas_geo[["latitude", "longitude", "quantidade"]].values.tolist()
 
-mapa = folium.Map(location=[-22.90, -43.20], zoom_start=7, tiles="OpenStreetMap")
+mapa = folium.Map(location=[-22.90, -43.20], zoom_start=7, tiles="OpenStreetMap", max_bounds=True,
+    min_zoom=3)
 
 fg_marcadores = folium.FeatureGroup(
     name="Marcadores",
