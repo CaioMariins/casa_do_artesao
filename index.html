@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa do Artesão de Niterói</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <script type="module" crossorigin src="/casa_do_artesao/assets/index-CPklvib8.js"></script>
+  <link rel="stylesheet" crossorigin href="/casa_do_artesao/assets/index-B1FhpYQU.css">
+</head>
+
+<body class="bg-base text-texto">
+
+  <!-- ── BARRA DE ACESSIBILIDADE ─────────────────────────── -->
+  <div id="barraAcessibilidade" role="toolbar" aria-label="Opções de acessibilidade">
+    <span aria-hidden="true">Acessibilidade:</span>
+
+    <!-- Tamanho de fonte -->
+    <button class="btn-acessibilidade" data-acao-fonte="diminuir" aria-label="Diminuir tamanho do texto"
+      title="Diminuir texto">
+      A−
+    </button>
+
+    <button class="btn-acessibilidade" data-acao-fonte="aumentar" aria-label="Aumentar tamanho do texto"
+      title="Aumentar texto">
+      A+
+    </button>
+
+    <!-- Alto contraste -->
+    <button id="btnContraste" class="btn-acessibilidade" aria-pressed="false" title="Ativar alto contraste">
+      ◑ Contraste
+    </button>
+  </div>
+
+  <!-- Header -->
+  <header class="fixed left-0 z-50 w-full border-b border-madeira/20 bg-base/95 shadow-sm backdrop-blur"
+    style="top: 2.4rem;">
+
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+      <a href="#inicio" class="flex items-center gap-3" aria-label="Ir para o início">
+        <div
+          class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border-2 border-terracota bg-white p-1 shadow-sm">
+          <img src="img/logo1.png" alt="Logo da Casa do Artesão de Niterói"
+            class="h-full w-full rounded-full object-contain" />
+        </div>
+
+        <div>
+          <h1 class="text-lg font-extrabold leading-tight text-madeira-escura">Casa do Artesão</h1>
+          <p class="text-xs font-bold uppercase tracking-[0.18em] text-verde-profundo">Niterói</p>
+        </div>
+      </a>
+
+      <!-- Nav desktop (oculta em mobile) -->
+      <nav class="hidden items-center gap-6 text-sm font-bold text-texto-suave md:flex"
+        aria-label="Navegação principal">
+        <a href="#sobre" class="transition hover:text-terracota-texto">Sobre</a>
+        <a href="#galeria" class="transition hover:text-terracota-texto">Galeria</a>
+        <a href="#feiras" class="transition hover:text-terracota-texto">Feiras</a>
+        <a href="#mapa" class="transition hover:text-terracota-texto">Mapa</a>
+        <a href="#participar" class="transition hover:text-terracota-texto">Como participar</a>
+        <a href="#contato" class="transition hover:text-terracota-texto">Contato</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="https://wa.me/5521966439991" target="_blank" rel="noopener noreferrer"
+          class="btn-destaque hidden rounded-full px-5 py-2 text-sm font-extrabold sm:inline-flex">WhatsApp</a>
+
+        <!-- Botão sanduíche — apenas mobile -->
+        <button id="btnMenu" type="button" aria-expanded="false" aria-controls="menuMobile" aria-label="Abrir menu">
+          <span class="linha" aria-hidden="true"></span>
+          <span class="linha" aria-hidden="true"></span>
+          <span class="linha" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pular para o conteúdo (skip link) -->
+  <a href="#conteudo-principal"
+    class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-20 focus:z-[999] focus:rounded-lg focus:bg-azul-casa focus:px-4 focus:py-2 focus:text-white focus:font-bold">
+    Pular para o conteúdo principal
+  </a>
+
+  <main id="conteudo-principal">
+    <!-- Hero -->
+    <section id="inicio" class="bg-papel px-4 pb-20" style="padding-top: calc(5rem + 2.4rem);">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+        <div class="fade-up">
+          <span class="badge-artesanal inline-block rounded-full px-4 py-2 text-sm font-extrabold">
+            Arte, cultura e economia criativa
+          </span>
+
+          <h2 class="mt-6 text-4xl font-extrabold leading-tight text-madeira-escura md:text-6xl">
+            Arte feita à mão. Cultura viva em cada canto de Niterói.
+          </h2>
+
+          <p class="mt-6 max-w-xl text-lg leading-relaxed text-texto-suave">
+            Conheça as feiras, valorize os artesãos e descubra como participar da rede que fortalece o artesanato,
+            a cultura local e a geração de renda em Niterói.
+          </p>
+
+          <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+            <a href="#feiras" class="btn-destaque inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Ver feiras
+            </a>
+
+            <a href="#participar"
+              class="btn-secundario inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Como participar
+            </a>
+          </div>
+        </div>
+
+        <div class="relative fade-up">
+          <div class="card-artesanal rounded-[2rem] p-6">
+            <div
+              class="h-56 sm:h-72 md:h-80 lg:h-96 overflow-hidden rounded-[1.5rem] bg-base p-0 relative ring-1 ring-madeira/15 shadow-lg shadow-madeira/10">
+              <img id="abrirGaleria" src="img/image01.webp" alt="Imagem principal da galeria" role="button" tabindex="0"
+                class="h-full w-full object-contain md:object-cover object-center rounded-[1.5rem] transition duration-500 hover:scale-105 cursor-pointer" />
+            </div>
+          </div>
+          <div class="mt-4 flex justify-center">
+            <button id="abrirGaleriaBtn" type="button"
+              class="btn-secundario rounded-full px-6 py-3 text-sm font-extrabold">
+              Ver todas as fotos
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="bg-base px-4 py-20">
+      <div class="mx-auto max-w-7xl">
+        <div class="max-w-3xl">
+          <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">
+            Sobre a Casa
+          </span>
+
+          <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">
+            Uma rede que valoriza o artesanato de Niterói
+          </h2>
+
+          <p class="mt-6 text-lg leading-relaxed text-texto-suave">
+            Criada em 2008, a Casa do Artesão é uma acção da Prefeitura de Niterói, sob gestão da Secretaria
+            Municipal das Culturas. A instituição organiza e administra as feiras de artesanato da cidade, promove
+            avaliações de novos artesãos e incentiva capacitações para fortalecer o sector.
+          </p>
+
+          <p class="mt-4 text-lg leading-relaxed text-texto-suave">
+            Mais do que espaços de venda, as feiras são pontos de encontro entre artesãos, moradores e visitantes,
+            fortalecendo a economia criativa, a cultura local e a renda de quem vive do trabalho manual.
+          </p>
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <article class="card-artesanal rounded-3xl p-6">
+            <p class="text-4xl" aria-hidden="true">🎨</p>
+            <h3 class="mt-4 text-xl font-extrabold text-madeira-escura">Cultura local</h3>
+            <p class="mt-2 leading-relaxed text-texto-suave">
+              As feiras preservam saberes, histórias e expressões artísticas da cidade.
+            </p>
+          </article>
+
+          <article class="card-artesanal rounded-3xl p-6">
+            <p class="text-4xl" aria-hidden="true">🧵</p>
+            <h3 class="mt-4 text-xl font-extrabold text-madeira-escura">Feito à mão</h3>
+            <p class="mt-2 leading-relaxed text-texto-suave">
+              Cada peça carrega técnica, dedicação, memória e identidade própria.
+            </p>
+          </article>
+
+          <article class="card-artesanal rounded-3xl p-6">
+            <p class="text-4xl" aria-hidden="true">🤝</p>
+            <h3 class="mt-4 text-xl font-extrabold text-madeira-escura">Economia criativa</h3>
+            <p class="mt-2 leading-relaxed text-texto-suave">
+              O artesanato fortalece a renda local e aproxima artistas, moradores e visitantes.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galeria -->
+    <section id="galeria" class="bg-papel px-4 py-20">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">
+              Galeria
+            </span>
+
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">
+              Artesanato, cores e histórias em cada peça
+            </h2>
+
+            <p class="mt-4 max-w-2xl text-lg leading-relaxed text-texto-suave">
+              Veja de perto os trabalhos manuais, as bancas, os detalhes e a criatividade dos artesãos
+              que fazem parte das feiras de Niterói.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-4">
+            <a href="#feiras" class="btn-secundario inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Ver feiras
+            </a>
+            <button id="abrirGaleriaSecundaria" type="button"
+              class="btn-destaque inline-flex justify-center rounded-full px-6 py-3 font-extrabold">
+              Ver fotos
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-12 grid gap-6 lg:grid-cols-3">
+          <!-- Galeria para abrir em modal grande -->
+          <div id="gridGaleria" class="lg:col-span-3 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+          <!-- Galeria descritiva original -->
+          <article class="card-artesanal overflow-hidden rounded-[2rem] lg:col-span-2">
+            <div class="relative h-[520px] overflow-hidden bg-madeira-escura md:h-[560px] lg:h-[620px]">
+              <img src="/casa_do_artesao/img/feira-01.jpg" alt="Banca com peças artesanais expostas em feira"
+                class="absolute inset-0 h-full w-full object-cover object-center" />
+
+              <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-6">
+                <span
+                  class="inline-block rounded-full bg-terracota px-4 py-2 text-xs font-extrabold uppercase tracking-[0.18em] text-white">
+                  Feito à mão
+                </span>
+
+                <h3 class="mt-3 text-2xl font-extrabold text-white md:text-3xl">
+                  Talento artesanal em exposição
+                </h3>
+
+                <p class="mt-2 max-w-xl text-sm leading-relaxed text-white/90">
+                  Peças únicas, coloridas e cheias de identidade, criadas por artesãos locais.
+                </p>
+              </div>
+            </div>
+          </article>
+
+          <div class="grid gap-6">
+            <article class="card-artesanal overflow-hidden rounded-[2rem]">
+              <div class="h-52 overflow-hidden">
+                <img src="/casa_do_artesao/img/feira-02.webp" alt="Detalhes de peças artesanais" loading="lazy" decoding="async"
+                  class="h-full w-full object-cover transition duration-300 hover:scale-105" />
+              </div>
+              <div class="p-5">
+                <h3 class="text-xl font-extrabold text-madeira-escura">Peças criativas</h3>
+                <p class="mt-2 leading-relaxed text-texto-suave">Trabalhos que unem técnica, cuidado e originalidade.
+                </p>
+              </div>
+            </article>
+
+            <article class="card-artesanal overflow-hidden rounded-[2rem]">
+              <div class="h-52 overflow-hidden">
+                <img src="img/feira-03.webp" alt="Produtos artesanais em exposição" loading="lazy" decoding="async"
+                  class="h-full w-full object-cover transition duration-300 hover:scale-105" />
+              </div>
+              <div class="p-5">
+                <h3 class="text-xl font-extrabold text-madeira-escura">Cultura local</h3>
+                <p class="mt-2 leading-relaxed text-texto-suave">Cada banca apresenta formas diferentes de criar e
+                  contar histórias.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <div class="h-56 overflow-hidden">
+              <img src="img/feira-04.webp" alt="Peças artesanais coloridas" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+            </div>
+            <div class="p-4">
+              <p class="font-extrabold text-madeira-escura">Cores e detalhes</p>
+              <p class="mt-1 text-sm text-texto-suave">Acabamentos que valorizam cada peça.</p>
+            </div>
+          </article>
+
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <div class="h-56 overflow-hidden">
+              <img src="img/feira-05.webp" alt="Banca de artesanato em feira" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+            </div>
+            <div class="p-4">
+              <p class="font-extrabold text-madeira-escura">Feiras da cidade</p>
+              <p class="mt-1 text-sm text-texto-suave">Espaços de encontro e valorização.</p>
+            </div>
+          </article>
+
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <div class="h-56 overflow-hidden">
+              <img src="img/feira-06.webp" alt="Produção artesanal feita à mão" loading="lazy" decoding="async"
+                class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+            </div>
+            <div class="p-4">
+              <p class="font-extrabold text-madeira-escura">Produção manual</p>
+              <p class="mt-1 text-sm text-texto-suave">Trabalho feito com dedicação.</p>
+            </div>
+          </article>
+
+          <article
+            class="group overflow-hidden rounded-3xl border border-madeira/20 bg-base shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+            <div class="h-56 overflow-hidden">
+              <img src="img/feira-07.webp" alt="Produtos artesanais com identidade local" loading="lazy"
+                decoding="async" class="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+            </div>
+            <div class="p-4">
+              <p class="font-extrabold text-madeira-escura">Identidade cultural</p>
+              <p class="mt-1 text-sm text-texto-suave">Arte que representa a cidade.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Números -->
+    <section class="bg-madeira-escura px-4 py-16 text-white" aria-label="Números da Casa do Artesão">
+      <div class="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="rounded-3xl bg-white/10 p-6">
+          <p class="text-4xl font-extrabold text-terracota">2008</p>
+          <p class="mt-2 text-white/80">ano de criação</p>
+        </article>
+        <article class="rounded-3xl bg-white/10 p-6">
+          <p class="text-4xl font-extrabold text-terracota">+1.200</p>
+          <p class="mt-2 text-white/80">artesãos cadastrados</p>
+        </article>
+        <article class="rounded-3xl bg-white/10 p-6">
+          <p class="text-4xl font-extrabold text-terracota">10</p>
+          <p class="mt-2 text-white/80">feiras acompanhadas</p>
+        </article>
+        <article class="rounded-3xl bg-white/10 p-6">
+          <p class="text-4xl font-extrabold text-terracota">R$100 bi</p>
+          <p class="mt-2 text-white/80">movimentados pelo artesanato no Brasil</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Feiras -->
+    <section id="feiras" class="bg-papel px-4 py-20">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Feiras</span>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">Encontre uma feira perto de você
+            </h2>
+            <p class="mt-4 max-w-2xl text-lg leading-relaxed text-texto-suave">
+              Veja os locais, dias e horários das feiras de artesanato coordenadas pela Casa do Artesão.
+            </p>
+          </div>
+          <button id="abrirMapa" type="button" class="btn-destaque rounded-full px-6 py-3 font-extrabold">
+            Abrir mapa das feiras
+          </button>
+        </div>
+        <div id="listaFeiras" class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <!-- Cards gerados pelo main.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Mapa -->
+    <section id="mapa" class="bg-base px-4 py-20">
+      <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+        <div>
+          <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Mapa</span>
+          <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">Localize as feiras pela cidade</h2>
+          <p class="mt-5 text-lg leading-relaxed text-texto-suave">
+            O mapa ajuda moradores, visitantes e artesãos a encontrarem as feiras de forma simples. Cada ponto mostra
+            o local, os dias e o horário de funcionamento.
+          </p>
+          <button id="abrirMapaSecundario" type="button"
+            class="btn-secundario mt-8 rounded-full px-6 py-3 font-extrabold">
+            Ver mapa interativo
+          </button>
+        </div>
+
+        <div class="card-artesanal rounded-[2rem] p-6">
+          <div
+            class="flex h-72 items-center justify-center rounded-[1.5rem] bg-gradient-to-br from-creme via-base to-azul-casa/20 p-8 text-center">
+            <div>
+              <p class="mb-4 text-7xl" aria-hidden="true">🗺️</p>
+              <h3 class="text-2xl font-extrabold text-madeira-escura">Feiras espalhadas por Niterói</h3>
+              <p class="mt-2 text-texto-suave">
+                Campo de São Bento, Fonseca, São Francisco, Ingá, Centro, Piratininga e outros pontos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Como participar -->
+    <section id="participar" class="bg-papel px-4 py-20">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+        <div>
+          <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Como participar</span>
+          <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-5xl">Quer expor nas feiras?</h2>
+          <p class="mt-6 text-lg leading-relaxed text-texto-suave">
+            Para participar das Feiras da Casa do Artesão como visitante, é necessário agendar pelo WhatsApp o cadastro
+            e a avaliação. O cadastro e a avaliação acontecem no mesmo dia.
+          </p>
+          <p class="mt-4 text-lg leading-relaxed text-texto-suave">
+            Os artesãos que demonstrarem a sua técnica com sucesso poderão participar como visitantes das feiras de
+            artesanato sob coordenação da Casa do Artesão.
+          </p>
+          <a href="https://wa.me/5521966439991" target="_blank" rel="noopener noreferrer"
+            class="btn-destaque mt-8 inline-flex rounded-full px-6 py-3 font-extrabold">
+            Agendar pelo WhatsApp
+          </a>
+        </div>
+
+        <div class="grid gap-4">
+          <article class="card-artesanal rounded-3xl p-5">
+            <p class="font-extrabold text-madeira-escura">1. Entre em contato</p>
+            <p class="mt-1 text-texto-suave">Fale com a Casa do Artesão pelo WhatsApp oficial.</p>
+          </article>
+          <article class="card-artesanal rounded-3xl p-5">
+            <p class="font-extrabold text-madeira-escura">2. Agende cadastro e avaliação</p>
+            <p class="mt-1 text-texto-suave">O cadastro e a avaliação acontecem no mesmo dia.</p>
+          </article>
+          <article class="card-artesanal rounded-3xl p-5">
+            <p class="font-extrabold text-madeira-escura">3. Demonstre a sua técnica</p>
+            <p class="mt-1 text-texto-suave">A avaliação considera a demonstração do trabalho artesanal.</p>
+          </article>
+          <article class="card-artesanal rounded-3xl p-5">
+            <p class="font-extrabold text-madeira-escura">4. Participe das feiras</p>
+            <p class="mt-1 text-texto-suave">Após aprovação, o artesão pode participar como visitante.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Capacitação / Secretaria -->
+    <section class="bg-base px-4 py-20">
+      <div class="mx-auto max-w-7xl">
+        <div class="grid gap-8 lg:grid-cols-2">
+          <article class="card-artesanal rounded-[2rem] p-8">
+            <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Capacitação</span>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura">Formação e fortalecimento dos artesãos</h2>
+            <p class="mt-5 leading-relaxed text-texto-suave">
+              Além da organização das feiras, a Casa do Artesão também promove encontros, avaliações e capacitações,
+              como iniciativas ligadas ao empreendedorismo artesanal.
+            </p>
+          </article>
+
+          <article class="card-artesanal rounded-[2rem] p-8">
+            <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Gestão pública</span>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura">Vinculada à Secretaria Municipal das Culturas
+            </h2>
+            <p class="mt-5 leading-relaxed text-texto-suave">
+              A Casa do Artesão faz parte das acções da Prefeitura de Niterói e está vinculada à Secretaria Municipal
+              das Culturas, actuando na valorização do artesanato e da economia criativa local.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato rápido -->
+    <section class="bg-papel px-4 py-20">
+      <div class="mx-auto max-w-7xl">
+        <div
+          class="rounded-[2rem] border border-madeira/20 bg-creme p-8 md:flex md:items-center md:justify-between md:gap-10">
+          <div>
+            <span class="text-sm font-extrabold uppercase tracking-[0.2em] text-terracota-texto">Contacto</span>
+            <h2 class="mt-3 text-3xl font-extrabold text-madeira-escura md:text-4xl">Fale com a Casa do Artesão</h2>
+            <p class="mt-3 max-w-2xl text-texto-suave">
+              Use os canais oficiais para tirar dúvidas, acompanhar informações e agendar cadastro e avaliação.
+            </p>
+          </div>
+          <a href="https://wa.me/5521966439991" target="_blank" rel="noopener noreferrer"
+            class="btn-destaque mt-6 inline-flex rounded-full px-6 py-3 font-extrabold md:mt-0">
+            Chamar no WhatsApp
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="contato" class="bg-madeira-escura px-4 py-12 text-white">
+    <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-2">
+      <div>
+        <h2 class="text-2xl font-extrabold text-terracota">Casa do Artesão de Niterói</h2>
+        <p class="mt-3 max-w-xl leading-relaxed text-white/80">
+          Uma ação da Prefeitura de Niterói, vinculada à Secretaria Municipal das Culturas.
+        </p>
+      </div>
+      <div class="space-y-2 text-white/90">
+        <p><strong>E-mail:</strong> casadoartesaodeniteroi@gmail.com</p>
+        <p><strong>WhatsApp:</strong> (21) 96643-9991</p>
+        <p><strong>Instagram:</strong> @casadoartesaodeniteroi</p>
+        <p><strong>Endereço:</strong> Rua Visconde de Moraes, 251, Ingá — Niterói</p>
+      </div>
+    </div>
+    <div class="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/50">
+      <p>Site informativo desenvolvido para divulgar as feiras, orientar novos artesãos e valorizar o artesanato de
+        Niterói.</p>
+    </div>
+  </footer>
+
+  <!-- Modal do mapa -->
+  <div id="modalMapa" class="fixed inset-0 z-[100] hidden bg-black/70 p-4" role="dialog" aria-modal="true"
+    aria-label="Mapa das feiras">
+    <div class="relative mx-auto mt-10 max-w-6xl rounded-3xl bg-base p-4 shadow-2xl md:p-6">
+      <button id="fecharMapa" type="button"
+        class="btn-destaque absolute right-4 top-4 rounded-full px-4 py-2 text-sm font-extrabold"
+        aria-label="Fechar mapa">
+        Fechar
+      </button>
+      <h2 class="mb-4 pr-24 text-2xl font-extrabold text-madeira-escura">Mapa das feiras</h2>
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <!-- Modal da galeria -->
+  <div id="modalGaleria" class="fixed inset-0 z-[100] hidden bg-black/95 flex items-center justify-center p-4"
+    role="dialog" aria-modal="true" aria-label="Galeria de fotos">
+    <div class="relative w-full max-w-5xl">
+      <!-- Container da foto grande -->
+      <div class="relative bg-black rounded-2xl overflow-hidden">
+        <button id="fecharGaleria" type="button"
+          class="absolute top-8 right-4 z-50 text-white bg-black/50 hover:bg-black/70 rounded-full p-2 text-2xl font-bold transition"
+          aria-label="Fechar galeria">
+          ✕
+        </button>
+        <img id="fotoGrande" src="" alt="Foto em destaque" class="w-full h-auto max-h-[70vh] object-contain">
+        <!-- Navegação -->
+        <button id="fotoPrev" type="button"
+          class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition"
+          aria-label="Foto anterior">
+          ❮
+        </button>
+        <button id="fotoNext" type="button"
+          class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-3 transition"
+          aria-label="Próxima foto">
+          ❯
+        </button>
+      </div>
+
+      <!-- Contador e thumbnails -->
+      <div class="mt-6 flex flex-col items-center">
+        <p class="text-white text-sm mb-4"><span id="fotoAtual">1</span> / <span id="totalFotos">7</span></p>
+        <div class="flex gap-3 justify-center flex-wrap" id="thumbnails"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botão voltar ao topo -->
+  <button id="btnTopo" type="button" aria-label="Voltar ao topo da página" title="Voltar ao topo">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- Scripts -->
+</body>
+
+</html>

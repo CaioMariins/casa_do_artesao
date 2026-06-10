@@ -1,0 +1,15 @@
+venv/
+.env/
+.venv/
+*.db
+*.sqlite3
+__pycache__/
+secrets.py
+.DS_Store
+~$*.xlsx
+*.xlsx
+*.csv
+*.odt
+node_modules/
+FrontEnd/dist/
+dist/
