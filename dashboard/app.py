@@ -905,6 +905,7 @@ for _, row in metricas_geo.iterrows():
     folium.Marker(
         location=[row["latitude"], row["longitude"]],
         radius=row["quantidade"],
+        icon=folium.Icon(color="blue", icon="info-sign"),
         popup=(
             f"""
             Cidade: {row["cidade"]}<br>
