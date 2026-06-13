@@ -46,12 +46,12 @@ CORES_SIM_NAO = {
 }
 
 CORES_RACA = {
-    "branco": "#BACFE6",
-    "pardo": "#F28E2B",
-    "preto": "#9C755F",
-    "amarelo": "#EDC948",
-    "indígena": "#59A14F",
-    "Não informado": "#BAB0AC",
+    "Branco": "#BACFE6",
+    "Pardo": "#F28E2B",
+    "Preto": "#9C755F",
+    "Amarelo": "#EDC948",
+    "Indígena": "#59A14F",
+    "Não Informado": "#BAB0AC",
 }
 TEMPLATE_PADRAO = "plotly_white"
 
@@ -69,7 +69,8 @@ div[data-testid="stMetric"] {
     unsafe_allow_html=True,
 )
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 
 /* Sidebar */
@@ -101,7 +102,9 @@ st.markdown("""
 }
 
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 # ============================================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -126,27 +129,48 @@ st.sidebar.title("Casa do Artesão")
 
 st.sidebar.markdown("---")
 
-
+feiras = sorted(df["feira"].unique())
 filtro_feira = st.sidebar.multiselect(
-    "Filtrar por feira", options=df["feira"].unique(), default=df["feira"].unique()
+    "Filtrar por feira", options=feiras, default=feiras
 )
+if not filtro_feira:
+    filtro_feira = df["feira"].unique()
 
+
+generos = sorted(df["genero"].unique())
 filtro_genero = st.sidebar.multiselect(
-    "Filtro por gênero", options=df["genero"].unique(), default=df["genero"].unique()
+    "Filtro por gênero", options=generos, default=generos
 )
+if not filtro_genero:
+    filtro_genero = df["genero"].unique()
 
+
+racas = sorted(df["raca"].unique())
+filtro_raca = st.sidebar.multiselect("Raça", options=racas)
+if not filtro_raca:
+    filtro_raca = df["raca"].unique()
+
+
+tipo_cadastros = sorted(df["tipo_cadastro"].unique())
 filtro_tipo_cadastro = st.sidebar.multiselect(
     "Tipo de cadastro",
-    options=df["tipo_cadastro"].unique(),
-    default=df["tipo_cadastro"].unique(),
+    options=tipo_cadastros,
+    default=tipo_cadastros,
 )
+if not filtro_tipo_cadastro:
+    filtro_tipo_cadastro = df["tipo_cadastro"].unique()
 
-filtro_mei = st.sidebar.multiselect(
-    "MEI", options=df["mei"].unique(), default=df["mei"].unique()
-)
+
+meis = sorted(df["mei"].unique())
+filtro_mei = st.sidebar.multiselect("MEI", options=meis, default=meis)
+if not filtro_mei:
+    filtro_mei = df["mei"].unique()
+
 
 bairros = sorted(df["bairro"].unique())
-bairros_selecionados = st.sidebar.multiselect( "Bairro", options=bairros)
+bairros_selecionados = st.sidebar.multiselect("Bairro", options=bairros)
+if not bairros_selecionados:
+    bairros_selecionados = df["bairro"].unique()
 
 
 df_filtrado = df[
@@ -154,12 +178,10 @@ df_filtrado = df[
     & (df["genero"].isin(filtro_genero))
     & (df["tipo_cadastro"].isin(filtro_tipo_cadastro))
     & (df["mei"].isin(filtro_mei))
+    & (df["bairro"].isin(bairros_selecionados))
+    & (df["raca"].isin(filtro_raca))
 ]
 
-if bairros_selecionados:
-    df_filtrado = df_filtrado[
-        df_filtrado["bairro"].isin(bairros_selecionados)
-    ]
 
 # ============================================================================
 # VALIDAÇÃO DE DADOS
@@ -234,9 +256,7 @@ fig_genero = px.bar(
 )
 
 fig_genero.update_traces(
-    text=metricas_demo["genero"].apply(
-        lambda row: f"{row['porcentagem']}%", axis=1
-    ),
+    text=metricas_demo["genero"].apply(lambda row: f"{row['porcentagem']}%", axis=1),
     textposition="outside",
     hovertemplate="<b><br>Percentual: %{customdata}%<extra></extra>",
     customdata=metricas_demo["genero"]["porcentagem"],
@@ -357,7 +377,8 @@ fig_piramide.update_xaxes(
 
 fig_piramide.update_yaxes(
     autorange="reversed",
-    tickfont=dict(color=COR_FONTE, size=11), title_font=dict(color=COR_FONTE, size=13)
+    tickfont=dict(color=COR_FONTE, size=11),
+    title_font=dict(color=COR_FONTE, size=13),
 )
 
 # Adicionar anotações indicando Homem e Mulher
@@ -626,8 +647,8 @@ metricas_territoriais["feira"] = metricas_territoriais["feira"].sort_values(
 metricas_territoriais["genero_por_feira"]["percentual"] = (
     metricas_territoriais["genero_por_feira"]["quantidade"]
     / metricas_territoriais["genero_por_feira"]
-        .groupby("feira")["quantidade"]
-        .transform("sum")  
+    .groupby("feira")["quantidade"]
+    .transform("sum")
     * 100
 ).round(1)
 
@@ -676,10 +697,7 @@ fig_genero_feira = px.bar(
 fig_genero_feira.update_traces(
     texttemplate="%{customdata[0]}%",
     textposition="outside",
-    hovertemplate=
-    "<b>%{x}</b><br>"
-    "%{fullData.name}: %{y}<br>"
-    "<extra></extra>",
+    hovertemplate="<b>%{x}</b><br>%{fullData.name}: %{y}<br><extra></extra>",
 )
 fig_genero_feira.update_layout(
     template=TEMPLATE_PADRAO,
@@ -697,7 +715,7 @@ fig_genero_feira.update_yaxes(
     range=[0, 100],
     tickfont=dict(color=COR_FONTE, size=11),
     title_font=dict(color=COR_FONTE, size=13),
-    ticksuffix="%"
+    ticksuffix="%",
 )
 
 col1, espaco, col2 = st.columns([1, 0.1, 1])
@@ -825,8 +843,8 @@ maximo = metricas_formalizacao["mei_por_feira"]["quantidade"].max()
 metricas_formalizacao["mei_por_feira"]["percentual"] = (
     metricas_formalizacao["mei_por_feira"]["quantidade"]
     / metricas_formalizacao["mei_por_feira"]
-        .groupby("feira")["quantidade"]
-        .transform("sum")    
+    .groupby("feira")["quantidade"]
+    .transform("sum")
     * 100
 ).round(1)
 
@@ -935,13 +953,15 @@ metricas_geo = calcular_metricas_geograficas(df)
 
 dados_heatmap = metricas_geo[["latitude", "longitude", "quantidade"]].values.tolist()
 
-mapa = folium.Map(location=[-22.90, -43.20], zoom_start=7, tiles="OpenStreetMap", max_bounds=True,
-    min_zoom=3)
-
-fg_marcadores = folium.FeatureGroup(
-    name="Marcadores",
-    show=True
+mapa = folium.Map(
+    location=[-22.90, -43.20],
+    zoom_start=7,
+    tiles="OpenStreetMap",
+    max_bounds=True,
+    min_zoom=3,
 )
+
+fg_marcadores = folium.FeatureGroup(name="Marcadores", show=True)
 
 for _, row in metricas_geo.iterrows():
     folium.Marker(

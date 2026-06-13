@@ -42,5 +42,12 @@ def criar_colunas_derivadas(df):
         .str.title()
     )
 
+    df["raca"] = (
+        df["raca"]
+        .fillna("Não informado")
+        .astype(str)
+        .str.strip()
+        .str.title()
+    )
 
     return df
