@@ -33,4 +33,14 @@ def criar_colunas_derivadas(df):
     df["renda_artesanato"] = (
         df["renda_artesanato"].str.replace("%", "", regex=False).astype(int)
     )
+
+    df["bairro"] = (
+        df["bairro"]
+        .fillna("Não informado")
+        .astype(str)
+        .str.strip()
+        .str.title()
+    )
+
+
     return df

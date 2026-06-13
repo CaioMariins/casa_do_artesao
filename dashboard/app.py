@@ -69,6 +69,40 @@ div[data-testid="stMetric"] {
     unsafe_allow_html=True,
 )
 
+st.markdown("""
+<style>
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #1E293B;
+}
+
+/* Título da sidebar */
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3 {
+    color: white;
+}
+
+/* Labels dos filtros */
+[data-testid="stSidebar"] label {
+    color: white !important;
+    font-weight: 600;
+}
+
+/* Texto dos multiselects */
+[data-testid="stSidebar"] span {
+    color: white;
+}
+
+/* Separadores */
+[data-testid="stSidebar"] hr {
+    border-color: #334155;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # ============================================================================
 # CONFIGURAÇÃO DA PÁGINA
 # ============================================================================
@@ -111,6 +145,10 @@ filtro_mei = st.sidebar.multiselect(
     "MEI", options=df["mei"].unique(), default=df["mei"].unique()
 )
 
+bairros = sorted(df["bairro"].unique())
+bairros_selecionados = st.sidebar.multiselect( "Bairro", options=bairros)
+
+
 df_filtrado = df[
     (df["feira"].isin(filtro_feira))
     & (df["genero"].isin(filtro_genero))
@@ -118,7 +156,10 @@ df_filtrado = df[
     & (df["mei"].isin(filtro_mei))
 ]
 
-st.sidebar.metric("Artesãos filtrados", len(df_filtrado))
+if bairros_selecionados:
+    df_filtrado = df_filtrado[
+        df_filtrado["bairro"].isin(bairros_selecionados)
+    ]
 
 # ============================================================================
 # VALIDAÇÃO DE DADOS
@@ -163,6 +204,7 @@ st.divider()
 # ============================================================================
 # PERFIL DEMOGRÁFICO
 # ============================================================================
+
 st.header("Perfil Demográfico")
 
 metricas_demo = calcular_metricas_demograficas(df_filtrado)
